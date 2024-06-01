@@ -17,4 +17,9 @@
       ExecStart = "${pkgs.usb-modeswitch}/bin/usb_modeswitch -R -v 8087 -p 0029";
     };
   };
+
+  services.nfs.server.enable = true;
+  services.nfs.server.exports = ''
+    /storage/Pictures         PenAndPaper(rw,fsid=0,no_subtree_check)
+  '';
 }

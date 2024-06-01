@@ -1,7 +1,7 @@
 {config, pkgs, lib, ... }:
 
 {
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "LightBulb"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -21,6 +21,9 @@
     57621 
     # For BitTorrent
     51413 
+
+    # NFSv4
+    2049
   ];
 
   networking.firewall.allowedUDPPorts = [ 
