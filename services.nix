@@ -20,6 +20,8 @@
 
   services.nfs.server.enable = true;
   services.nfs.server.exports = ''
-    /storage/Pictures         PenAndPaper(rw,fsid=0,no_subtree_check)
+    /storage/Pictures         PenAndPaper(rw,async,no_subtree_check)
   '';
+
+  services.openssh.enable = true;
 }
