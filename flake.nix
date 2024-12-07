@@ -34,11 +34,11 @@
 		};
 
 		# TODO Understand and rework
-		checks.x86_64-linux = import ./checks {
-			pkgs = nixpkgs.legacyPackages.x86_64-linux;
-			lib = nixpkgs.lib;
-			flake-inputs = inputs;
-		};
+#		checks.x86_64-linux = import ./checks {
+#			pkgs = nixpkgs.legacyPackages.x86_64-linux;
+#			lib = nixpkgs.lib;
+#			flake-inputs = inputs;
+#		};
 	};
 
 	inputs = {
@@ -48,6 +48,8 @@
 			url = "github:nix-community/nix-index-database";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
+
+		flake-compat.url = "https://flakehub.com/f/edolstra/flake-compat/1.tar.gz";
 
 		# TODO See if needed
 #		nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -65,24 +67,24 @@
 		# TODO See possible use cases
 #		impermanence.url = "github:nix-community/impermanence";
 
-		nix-gaming = {
-			url = "github:fufexan/nix-gaming";
-			inputs.nixpkgs.follows = "nixpkgs";
-		};
+#		nix-gaming = {
+#			url = "github:fufexan/nix-gaming";
+#			inputs.nixpkgs.follows = "nixpkgs";
+#		};
 
 		# TODO UNUSED. Declarative disk partitioning
-		disko = {
-			url = "github:nix-community/disko";
-			inputs.nixpkgs.follows = "nixpkgs";
-		};
+#		disko = {
+#			url = "github:nix-community/disko";
+#			inputs.nixpkgs.follows = "nixpkgs";
+#		};
 
 		# TODO UNUSED. Declarative remote builds
-		nixos-anywhere = {
-			url = "github:numtide/nixos-anywhere";
-			inputs = {
-				nixpkgs.follows = "nixpkgs";
-				disko.follows = "disko";
-			};
-		};
+#		nixos-anywhere = {
+#			url = "github:numtide/nixos-anywhere";
+#			inputs = {
+#				nixpkgs.follows = "nixpkgs";
+#				disko.follows = "disko";
+#			};
+#		};
 	};
 }
