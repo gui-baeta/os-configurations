@@ -1,7 +1,6 @@
 {config, pkgs, lib, ... }:
 
 {
-  networking.hostName = "LightBulb"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
