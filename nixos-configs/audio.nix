@@ -2,8 +2,9 @@
 
 {
   # Enable sound with pipewire.
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
+  # TODO Remove? Is it on by default?
+  # hardware.bluetooth.enable = true;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -16,8 +17,5 @@
     # Enable audio through pipewire
     audio.enable = true;
     pulse.enable = true;
-    
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
   };
 }
