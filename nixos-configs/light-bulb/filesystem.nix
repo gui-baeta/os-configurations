@@ -18,7 +18,6 @@
     # # 256GB SSD
     # "/other".device = "/dev/mapper/luks-50eaf8fa-3241-4179-b7a2-bf4af9473cee";
 
-
     # # Pictures NFS Share
     # "/mnt/Pictures" = {
     #   device = "LightBulb:/Pictures";

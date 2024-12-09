@@ -1,4 +1,4 @@
-{config, pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -10,25 +10,25 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
-   # Enable IPv6 globally (May want to manually disable for each VPN connection, if the provider doesn't support it)
+  # Enable IPv6 globally (May want to manually disable for each VPN connection, if the provider doesn't support it)
   networking.enableIPv6 = true;
 
   # Some Firewall Rules
-  networking.firewall.allowedTCPPorts = [ 
+  networking.firewall.allowedTCPPorts = [
     # Spotify - To sync local tracks from your filesystem with mobile devices 
     # in the same network, need to open port 57621: 
-    57621 
+    57621
     # For BitTorrent
-    51413 
+    51413
 
     # NFSv4
     2049
   ];
 
-  networking.firewall.allowedUDPPorts = [ 
+  networking.firewall.allowedUDPPorts = [
     # In order to enable discovery of Google Cast devices (and possibly other Spotify Connect devices) in the same network by the Spotify app, need to open UDP port 5353:
-    5353 
+    5353
     # BitTorrent
-    51413 
+    51413
   ];
 }
