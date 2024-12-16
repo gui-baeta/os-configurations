@@ -1,11 +1,11 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, flake-inputs, ... }:
 
 {
-  # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
-  # TODO Remove? Is it on by default?
   # hardware.bluetooth.enable = true;
   security.rtkit.enable = true;
+  
+  hardware.pulseaudio.enable = false;
+  # Enable sound with pipewire.
   services.pipewire = {
     enable = true;
 
