@@ -2,20 +2,11 @@
 
 {
   imports = [
-    ./audio.nix
-
-    ./display.nix
+    # Modules in common
+    ./programs.nix
     ./fonts.nix
-    ./for-games.nix
-    ./gnome.nix
-    ./hardware.nix
-    ./localisation.nix
-    ./networking.nix
-    ./package-exclusions.nix
-    ./programs-and-packages.nix
-    ./security.nix
-    ./services.nix
-    ./virtualisation.nix
+    ./sound.nix
+    ./overrides.nix
 
     # TODO Eventually, for created modules
     # ../modules
@@ -33,8 +24,7 @@
   nix = {
     settings = {
       auto-optimise-store = true;
-      allowUnfree = true;
-      experimental-feature = [ "nix-command" "flakes" ];
+      experimental-features = [ "nix-command" "flakes" ];
 
       substituters = [ "https://nix-community.cachix.org" ];
       trusted-public-keys = [
