@@ -105,9 +105,6 @@
       enableBrowserSocket = false;
     };
   };
-
-  programs.nix-index.enable = true;
-  programs.command-not-found.enable = false;
   
   # Fix some linking problems
   programs.nix-ld.enable = true;
