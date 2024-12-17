@@ -22,14 +22,13 @@
       modules = [
         # Import the previous configuration.nix we used,
         # so the old configuration file still takes effect
-        ./modules/.
-        ./hosts/pen-and-paper/configuration.nix
+        "${self}/modules/."
+        "${self}/hosts/pen-and-paper/configuration.nix"
 
         nix-index-database.nixosModules.nix-index
         { programs.nix-index-database.comma.enable = true; }
       ];
 
-      extraSpecialArgs = {rootPath = ./.;};
       specialArgs.flake-inputs = inputs;
     };
   };
