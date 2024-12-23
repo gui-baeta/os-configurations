@@ -1,8 +1,13 @@
-{ config, pkgs, flake-inputs, ... }:
+{
+  config,
+  pkgs,
+  flake-inputs,
+  ...
+}:
 
 {
-  # List packages installed in system profile. 
-  #  To search, run: 
+  # List packages installed in system profile.
+  #  To search, run:
   #  $ nix search wget
   environment.systemPackages = with pkgs; [
     # Unofficial Amazon Games Launcher
@@ -13,9 +18,9 @@
 
     gnome-tweaks
     dconf-editor
-    
+
     spotify
-    
+
     vscode
 
     # GSConnect extensions

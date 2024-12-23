@@ -2,32 +2,41 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, options, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  options,
+  ...
+}:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   services.rpcbind.enable = true;
   services.nfs.server.enable = true;
-  systemd.mounts = [{
-    type = "nfs";
-    mountConfig = {
-      Options = "noatime";
-    };
-    what = "LightBulb:/storage/Pictures";
-    where = "/mnt/NFS-Pictures";
-  }];
-  systemd.automounts = [{
-    wantedBy = [ "multi-user.target" ];
-    automountConfig = {
-      TimeoutIdleSec = "600";
-    };
-    where = "/mnt/NFS-Pictures";
-  }];
-
+  systemd.mounts = [
+    {
+      type = "nfs";
+      mountConfig = {
+        Options = "noatime";
+      };
+      what = "LightBulb:/storage/Pictures";
+      where = "/mnt/NFS-Pictures";
+    }
+  ];
+  systemd.automounts = [
+    {
+      wantedBy = [ "multi-user.target" ];
+      automountConfig = {
+        TimeoutIdleSec = "600";
+      };
+      where = "/mnt/NFS-Pictures";
+    }
+  ];
 
   # Enable the ClamAV service and keep the database up to date
   # services.clamav = {
@@ -35,7 +44,6 @@
   #   updater.enable = true;
   # };
 
-  
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -51,15 +59,32 @@
   #     modDirVersion = "6.11.5";
   #     };
   # });
-  
-  boot.kernelParams = [ "amdgpu.abmlevel=0" "amdgpu.dcdebugmask=0x10" "amdgpu.dcdebugmask=0x200" ]; # "sdr" "psr" "psr"
-  boot.kernelModules = [ "amdgpu" "kvm-amd" ];
+
+  boot.kernelParams = [
+    "amdgpu.abmlevel=0"
+    "amdgpu.dcdebugmask=0x10"
+    "amdgpu.dcdebugmask=0x200"
+  ]; # "sdr" "psr" "psr"
+  boot.kernelModules = [
+    "amdgpu"
+    "kvm-amd"
+  ];
   boot.extraModulePackages = [ ];
   boot.supportedFilesystems = [ "nfs" ]; # For NFS Client to work
 
-  boot.initrd.availableKernelModules = [ "nfs" "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" "amdgpu" ];
+  boot.initrd.availableKernelModules = [
+    "nfs"
+    "xhci_pci"
+    "ahci"
+    "nvme"
+    "usb_storage"
+    "usbhid"
+    "sd_mod"
+    "amdgpu"
+  ];
 
-  boot.initrd.luks.devices."luks-fe128010-0577-4daa-8a2e-1b43503da280".device = "/dev/disk/by-uuid/fe128010-0577-4daa-8a2e-1b43503da280";
+  boot.initrd.luks.devices."luks-fe128010-0577-4daa-8a2e-1b43503da280".device =
+    "/dev/disk/by-uuid/fe128010-0577-4daa-8a2e-1b43503da280";
   networking.hostName = "pen-and-paper"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -105,15 +130,15 @@
       enableBrowserSocket = false;
     };
   };
-  
+
   # Fix some linking problems
   programs.nix-ld.enable = true;
 
   # AMD GPU control app
   programs.corectrl.enable = true;
-  
+
   programs.dconf.enable = true;
-  
+
   # Logitech Devices (Mouse, etc)
   hardware.logitech.wireless.enable = true;
 
@@ -141,25 +166,26 @@
   users.users.guibaeta = {
     isNormalUser = true;
     description = "Guilherme Fontes";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
     shell = pkgs.fish;
     useDefaultShell = true;
 
     packages = with pkgs; [
       # Management Tools
       git
-      
+
       # Browsers
-      (
-        pkgs.symlinkJoin {
-          name = "firefox-overlay";
-          paths = [ pkgs.firefox ];
-          buildInputs = [ pkgs.makeWrapper ];
-          postBuild = ''
-            wrapProgram $out/bin/firefox --set GTK_IM_MODULE xim
-          '';
-        }
-      )
+      (pkgs.symlinkJoin {
+        name = "firefox-overlay";
+        paths = [ pkgs.firefox ];
+        buildInputs = [ pkgs.makeWrapper ];
+        postBuild = ''
+          wrapProgram $out/bin/firefox --set GTK_IM_MODULE xim
+        '';
+      })
       google-chrome
       brave
 
@@ -171,7 +197,7 @@
 
       # MPV but pretty
       celluloid
-      
+
       stremio
 
       # BitTorrent client
@@ -234,19 +260,19 @@
   };
 
   # Some Firewall Rules
-  networking.firewall.allowedTCPPorts = [ 
-    # Spotify - To sync local tracks from your filesystem with mobile devices 
-    # in the same network, need to open port 57621: 
-    57621 
+  networking.firewall.allowedTCPPorts = [
+    # Spotify - To sync local tracks from your filesystem with mobile devices
+    # in the same network, need to open port 57621:
+    57621
     # For BitTorrent
-    51413 
+    51413
   ];
 
-  networking.firewall.allowedUDPPorts = [ 
+  networking.firewall.allowedUDPPorts = [
     # In order to enable discovery of Google Cast devices (and possibly other Spotify Connect devices) in the same network by the Spotify app, need to open UDP port 5353:
-    5353 
+    5353
     # BitTorrent
-    51413 
+    51413
   ];
 
   # Fish shell
@@ -254,7 +280,7 @@
 
   # Direnv - To automatically setup nix shells when entering a project directory
   programs.direnv.enable = true;
-  
+
   # Java - For Steam
   # programs.java.enable = true;
 
@@ -306,24 +332,25 @@
   # '';
 
   # Most software has the HIP libraries hard-coded. You can work around it on NixOS by using:
-  systemd.tmpfiles.rules = 
-  let
-    rocmEnv = pkgs.symlinkJoin {
-      name = "rocm-combined";
-      paths = with pkgs.rocmPackages; [
-        rocblas
-        hipblas
-        clr
-      ];
-    };
-  in [
-    "L+    /opt/rocm   -    -    -     -    ${rocmEnv}"
-  ];
-    
-  hardware.cpu.amd.updateMicrocode = true;                                                  
+  systemd.tmpfiles.rules =
+    let
+      rocmEnv = pkgs.symlinkJoin {
+        name = "rocm-combined";
+        paths = with pkgs.rocmPackages; [
+          rocblas
+          hipblas
+          clr
+        ];
+      };
+    in
+    [
+      "L+    /opt/rocm   -    -    -     -    ${rocmEnv}"
+    ];
+
+  hardware.cpu.amd.updateMicrocode = true;
   # hardware.enableRedistributableFirmware = true;
   hardware.enableAllFirmware = true;
-  
+
   hardware.graphics = {
     enable = true;
     enable32Bit = true; # For 32 bit applications
@@ -338,7 +365,7 @@
 
       # OpenCL support through MESA
       mesa.opencl
-      # FIXME 
+      # FIXME
       # Note: at some point GPUs in the R600 family and newer
       # may need to replace this with the "rusticl" ICD;
       # and GPUs in the R500-family and older may need to
@@ -347,7 +374,7 @@
       # - https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/19385
     ];
 
-    # For 32 bit applications 
+    # For 32 bit applications
     extraPackages32 = with pkgs; [
       driversi686Linux.amdvlk
     ];
