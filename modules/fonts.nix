@@ -1,9 +1,19 @@
-{ config, pkgs, flake-inputs, ... }:
+{
+  config,
+  pkgs,
+  flake-inputs,
+  ...
+}:
 
 {
   # Available fonts
   fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
+    (nerdfonts.override {
+      fonts = [
+        "FiraCode"
+        "DroidSansMono"
+      ];
+    })
 
     corefonts
     vistafonts
