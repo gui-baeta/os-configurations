@@ -2,13 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{
-  config,
-  pkgs,
-  lib,
-  options,
-  ...
-}:
+{ config, pkgs, lib, options, ... }:
 
 {
   imports = [
@@ -18,25 +12,17 @@
 
   services.rpcbind.enable = true;
   services.nfs.server.enable = true;
-  systemd.mounts = [
-    {
-      type = "nfs";
-      mountConfig = {
-        Options = "noatime";
-      };
-      what = "LightBulb:/storage/Pictures";
-      where = "/mnt/NFS-Pictures";
-    }
-  ];
-  systemd.automounts = [
-    {
-      wantedBy = [ "multi-user.target" ];
-      automountConfig = {
-        TimeoutIdleSec = "600";
-      };
-      where = "/mnt/NFS-Pictures";
-    }
-  ];
+  systemd.mounts = [{
+    type = "nfs";
+    mountConfig = { Options = "noatime"; };
+    what = "LightBulb:/storage/Pictures";
+    where = "/mnt/NFS-Pictures";
+  }];
+  systemd.automounts = [{
+    wantedBy = [ "multi-user.target" ];
+    automountConfig = { TimeoutIdleSec = "600"; };
+    where = "/mnt/NFS-Pictures";
+  }];
 
   # Enable the ClamAV service and keep the database up to date
   # services.clamav = {
@@ -65,23 +51,12 @@
     "amdgpu.dcdebugmask=0x10"
     "amdgpu.dcdebugmask=0x200"
   ]; # "sdr" "psr" "psr"
-  boot.kernelModules = [
-    "amdgpu"
-    "kvm-amd"
-  ];
+  boot.kernelModules = [ "amdgpu" "kvm-amd" ];
   boot.extraModulePackages = [ ];
   boot.supportedFilesystems = [ "nfs" ]; # For NFS Client to work
 
-  boot.initrd.availableKernelModules = [
-    "nfs"
-    "xhci_pci"
-    "ahci"
-    "nvme"
-    "usb_storage"
-    "usbhid"
-    "sd_mod"
-    "amdgpu"
-  ];
+  boot.initrd.availableKernelModules =
+    [ "nfs" "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" "amdgpu" ];
 
   boot.initrd.luks.devices."luks-fe128010-0577-4daa-8a2e-1b43503da280".device =
     "/dev/disk/by-uuid/fe128010-0577-4daa-8a2e-1b43503da280";
@@ -117,7 +92,8 @@
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-  services.xserver.videoDrivers = [ "modesetting" ]; # Either this or "amdgpu-pro"
+  services.xserver.videoDrivers =
+    [ "modesetting" ]; # Either this or "amdgpu-pro"
 
   # Enable Screen Sharing
   xdg.portal.wlr.enable = true;
@@ -166,10 +142,7 @@
   users.users.guibaeta = {
     isNormalUser = true;
     description = "Guilherme Fontes";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-    ];
+    extraGroups = [ "networkmanager" "wheel" ];
     shell = pkgs.fish;
     useDefaultShell = true;
 
@@ -254,6 +227,8 @@
       # Audio Simple Wiring Tool
       helvum
 
+      sticky-notes
+
       # Virtual Desktop Infrastructure Client
       # vmware-horizon-client
     ];
@@ -316,15 +291,16 @@
   virtualisation.spiceUSBRedirection.enable = true;
   # security.wrappers.spice-client-glib-usb-acl-helper.source = "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
 
-  environment.pathsToLink = [
-    "/share/fish"
-  ];
+  environment.pathsToLink = [ "/share/fish" ];
 
   # Set aliases across sessions
   programs.fish.shellAliases = lib.mkForce {
-    gitwordschanged = "nix-shell -p git --run \"git diff --word-diff=porcelain HEAD | grep -e \'^[-+][^-+]\' | wc -w\"";
-    gitwordsadded = "nix-shell -p git --run \"git diff --word-diff=porcelain HEAD | grep -e \'^+[^-+]\' | wc -w\"";
-    list_profile_packages = "nix-store --query --requisites /run/current-system | cut -d- -f2- | sort -u";
+    gitwordschanged = ''
+      nix-shell -p git --run "git diff --word-diff=porcelain HEAD | grep -e '^[-+][^-+]' | wc -w"'';
+    gitwordsadded = ''
+      nix-shell -p git --run "git diff --word-diff=porcelain HEAD | grep -e '^+[^-+]' | wc -w"'';
+    list_profile_packages =
+      "nix-store --query --requisites /run/current-system | cut -d- -f2- | sort -u";
   };
 
   # programs.fish.interactiveShellInit = ''
@@ -332,20 +308,12 @@
   # '';
 
   # Most software has the HIP libraries hard-coded. You can work around it on NixOS by using:
-  systemd.tmpfiles.rules =
-    let
-      rocmEnv = pkgs.symlinkJoin {
-        name = "rocm-combined";
-        paths = with pkgs.rocmPackages; [
-          rocblas
-          hipblas
-          clr
-        ];
-      };
-    in
-    [
-      "L+    /opt/rocm   -    -    -     -    ${rocmEnv}"
-    ];
+  systemd.tmpfiles.rules = let
+    rocmEnv = pkgs.symlinkJoin {
+      name = "rocm-combined";
+      paths = with pkgs.rocmPackages; [ rocblas hipblas clr ];
+    };
+  in [ "L+    /opt/rocm   -    -    -     -    ${rocmEnv}" ];
 
   hardware.cpu.amd.updateMicrocode = true;
   # hardware.enableRedistributableFirmware = true;
@@ -375,9 +343,7 @@
     ];
 
     # For 32 bit applications
-    extraPackages32 = with pkgs; [
-      driversi686Linux.amdvlk
-    ];
+    extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
   };
 
   # Enable Vulkan support with amdvlk drivers

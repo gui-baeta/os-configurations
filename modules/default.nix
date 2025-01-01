@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  flake-inputs,
-  ...
-}:
+{ config, pkgs, inputs, ... }:
 
 {
   imports = [
@@ -29,10 +24,7 @@
   nix = {
     settings = {
       auto-optimise-store = true;
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
+      experimental-features = [ "nix-command" "flakes" ];
 
       substituters = [ "https://nix-community.cachix.org" ];
       trusted-public-keys = [
@@ -47,13 +39,13 @@
     };
 
     # Make the nixpkgs flake input be used for various nix commands
-    nixPath = [ "nixpkgs=${flake-inputs.nixpkgs}" ];
+    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
     registry.nixpkgs = {
       from = {
         id = "nixpkgs";
         type = "indirect";
       };
-      flake = flake-inputs.nixpkgs;
+      flake = inputs.nixpkgs;
     };
   };
 }
