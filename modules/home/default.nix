@@ -39,15 +39,52 @@
       editor.smart-tab = { enable = true; };
     };
     languages = {
-      language = [{
-        name = "nix";
-        auto-format = true;
-        formatter.command = "${pkgs.nixfmt}/bin/nixfmt";
-      }];
+      language = [
+        {
+          name = "nix";
+          auto-format = true;
+          formatter.command = "${pkgs.nixfmt}/bin/nixfmt";
+        }
+        {
+          name = "typescript";
+          language-servers = [
+            {
+              name = "efm";
+              only-features = [ "diagnostics" "format" ];
+            }
+            {
+              name = "typescript-language-server";
+              except-features = [ "format" ];
+            }
+          ];
+        }
+      ];
       language-server = {
         eslint = {
           command =
             "${pkgs.vscode-langservers-extracted}/bin/vscode-eslint-language-server";
+          config = {
+            format = true;
+            nodePath = "";
+            onIgnoredFiles = "off";
+            packageManager = "yarn";
+            quiet = false;
+            rulesCustomizations = [ ];
+            run = "onType";
+            useESLintClass = false;
+            validate = "on";
+            codeAction = {
+              disableRuleComment = {
+                enable = true;
+                location = "separateLine";
+              };
+              showDocumentation = { enable = true; };
+            };
+            codeActionOnSave = { mode = "all"; };
+            experimental = { };
+            problems = { shortenToSingleLine = false; };
+            workingDirectory = { mode = "auto"; };
+          };
         };
         json = {
           command =
@@ -61,6 +98,7 @@
           command =
             "${pkgs.vscode-langservers-extracted}/bin/vscode-css-language-server";
         };
+        efm = { command = "${pkgs.efm-langserver}/bin/efm-langserver"; };
       };
     };
   };
