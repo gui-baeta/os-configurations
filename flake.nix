@@ -20,32 +20,50 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
 
-  outputs = { self, nixpkgs, home-manager, nix-index-database, ... }@inputs: {
-    # Please replace my-nixos with your hostname
-    nixosConfigurations.pen-and-paper = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        # Import the previous configuration.nix we used,
-        # so the old configuration file still takes effect
-        # TODO Put things from configuration.nix in modules when possible
-        "${self}/modules/."
-        "${self}/hosts/pen-and-paper/configuration.nix"
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nix-index-database
+    , ... }@inputs: {
+      # Please replace my-nixos with your hostname
+      nixosConfigurations.pen-and-paper = nixpkgs.lib.nixosSystem rec {
+        system = "x86_64-linux";
+        modules = [
+          # Import the previous configuration.nix we used,
+          # so the old configuration file still takes effect
+          # TODO Put things from configuration.nix in modules when possible
+          "${self}/modules/."
+          "${self}/hosts/pen-and-paper/configuration.nix"
 
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.guibaeta = import "${self}/modules/home/.";
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.guibaeta = import "${self}/modules/home/.";
 
-          # Optionally, use home-manager.extraSpecialArgs to pass
-          # arguments to home.nix
-        }
+              # Optionally, use home-manager.extraSpecialArgs to pass
+              # arguments to home.nix
+              extraSpecialArgs = {
+                # FIXME This is a really ugly way to pass down nixpkgs-unstable to the home modules
+                # Needs refactor
+                # See:
+                #   - https://github.com/chris-martin/home/blob/eb12e3c02d25bb1b2b2624021bd8479996352a4c/os/flake.nix
+                #   - https://github.com/chris-martin/home/blob/dc79903c93f654108ea3c05cfd779bdef72eb584/os/home/modules/packages.nix
+                #   - https://www.reddit.com/r/NixOS/comments/12ewa4j/newbie_how_to_use_unstable_packages_in/
+                #   - Search more
+                unstable-pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux;
 
-        nix-index-database.nixosModules.nix-index
-        { programs.nix-index-database.comma.enable = true; }
-      ];
+                # FIXME Dont know how to use it in flake. Put in module
+                #   inherit inputs;
+                #   # https://github.com/TLATER/dotfiles/blob/d6dd373a4de4e0f33224883c690fa6536d57ab89/nixos-config/default.nix#L63
+                #   nixos-config = config;
+              };
+            };
+          }
 
-      specialArgs = { inherit inputs; };
+          nix-index-database.nixosModules.nix-index
+          { programs.nix-index-database.comma.enable = true; }
+        ];
+
+        specialArgs = { inherit inputs; };
+      };
     };
-  };
 }
