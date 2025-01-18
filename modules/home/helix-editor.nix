@@ -2,6 +2,11 @@
 
   programs.helix.package = unstable-pkgs.helix;
 
+  home.packages = with pkgs; [
+    # Yaml lintining
+    yaml-language-server
+  ];
+
   programs.helix = {
     enable = true;
     settings = {
@@ -85,6 +90,20 @@
         }
       ];
       language-server = {
+        yaml-language-server = {
+          config = {
+            yaml = {
+              format.enable = true;
+              validation = true;
+              schemas = {
+                "https://json.schemastore.org/github-workflow.json" =
+                  ".github/workflows/*.{yml,yaml}";
+                "https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible-tasks.json" =
+                  "roles/{tasks,handlers}/*.{yml,yaml}";
+              };
+            };
+          };
+        };
         eslint = {
           command =
             "${pkgs.vscode-langservers-extracted}/bin/vscode-eslint-language-server";
