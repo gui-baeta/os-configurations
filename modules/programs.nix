@@ -59,5 +59,6 @@
 
     # AMD GPU GUI
     corectrl
+    wl-clipboard
   ];
 }
