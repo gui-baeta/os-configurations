@@ -5,6 +5,9 @@
   home.packages = with pkgs; [
     # Yaml lintining
     yaml-language-server
+
+    # Type checking, for comments and text
+    harper
   ];
 
   programs.helix = {
@@ -143,6 +146,33 @@
             "${pkgs.vscode-langservers-extracted}/bin/vscode-css-language-server";
         };
         efm = { command = "${pkgs.efm-langserver}/bin/efm-langserver"; };
+        harper-ls = {
+          command = "harper-ls";
+          args = [ "--stdio" ];
+          config = {
+            harper-ls = {
+              diagnosticSeverity = "warning";
+              linters = {
+                # Words should be separated by at most one space.
+                spaces = false;
+                # Spelled numbers less than 10.
+                spelled_numbers = true;
+                correct_number_suffix = true;
+                sentence_capitalization = true;
+                unclosed_quotes = true;
+                # NOTE Not sure about this one
+                # The key on the keyboard often used as
+                #  a quotation mark is actually a double-apostrophe.
+                # Use the correct character.
+                wrong_quotes = true;
+                avoid_curses = false;
+
+                spell_check = true;
+                currency_placement = true;
+              };
+            };
+          };
+        };
       };
     };
   };
