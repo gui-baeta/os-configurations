@@ -8,6 +8,13 @@
 
     # Type checking, for comments and text
     harper
+    # Bery fast Python linting
+    ruff
+    (with python312Packages;
+      (
+        # Python linting, using pylsp and ruff in the back
+        python-lsp-ruff))
+
   ];
 
   programs.helix = {
