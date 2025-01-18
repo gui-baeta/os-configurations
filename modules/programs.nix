@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  flake-inputs,
-  ...
-}:
+{ config, pkgs, flake-inputs, ... }:
 
 {
   # List packages installed in system profile.
