@@ -41,6 +41,12 @@
         text-width = 80;
         default-line-ending = "lf";
         insert-final-newline = true;
+
+        end-of-line-diagnostics = "hint";
+        inline-diagnostics = {
+          cursor-line = "error";
+          other-lines = "error";
+        };
       };
 
       keys.normal = {
@@ -66,6 +72,7 @@
         "{" = "}";
         "[" = "]";
         "\"" = ''"'';
+        "'" = "'";
         "`" = "`";
         "<" = ">";
       };
