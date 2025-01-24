@@ -1,36 +1,27 @@
-{
-  config,
-  lib,
-  pkgs,
-  flake-inputs,
-  ...
-}:
+{ config, lib, pkgs, flake-inputs, ... }:
 
 {
   services.xserver.excludePackages = [ pkgs.xterm ];
 
-  environment.gnome.excludePackages = (
-    with pkgs;
-    [
-      gnome-tour
-      snapshot
-      orca
-      seahorse # password manager
-      totem # video player
-      yelp
-      gnome-maps
-      gnome-music
-      epiphany # web browser
-      geary # email reader
-      evolution
-      gnome-clocks
-      gnome-weather
-      gnome-contacts
-      gnome-calendar
-      gnome-calculator
-      gnome-backgrounds
-    ]
-  );
+  environment.gnome.excludePackages = (with pkgs; [
+    gnome-tour
+    snapshot
+    orca
+    seahorse # password manager
+    totem # video player
+    yelp
+    gnome-maps
+    gnome-music
+    epiphany # web browser
+    geary # email reader
+    evolution
+    gnome-clocks
+    gnome-weather
+    gnome-contacts
+    gnome-calendar
+    gnome-calculator
+    gnome-backgrounds
+  ]);
 
   services.gnome.evolution-data-server.enable = lib.mkForce false;
   services.gnome.gnome-initial-setup.enable = false;
@@ -88,7 +79,7 @@
       confirm-clear=false
       paste-on-selection=false
 
-      # 1st - If the ambient light sensor functionality is enabled.
+      # 1st line - If the ambient light sensor functionality is enabled.
       [org.gnome.settings-daemon.plugins.power]
       ambient-enabled=false
       idle-dim=true

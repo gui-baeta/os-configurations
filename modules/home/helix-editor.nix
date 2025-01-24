@@ -1,26 +1,61 @@
-{ config, pkgs, unstable-pkgs, ... }: {
+{
+  config,
+  pkgs,
+  unstable-pkgs,
+  ...
+}:
+{
 
   programs.helix.package = unstable-pkgs.helix;
 
-  home.packages = with pkgs; [
-    # Yaml lintining
-    yaml-language-server
-
-    # Type checking, for comments and text
-    harper
-    # Bery fast Python linting
-    ruff
-    (with python312Packages;
-      (
+  home.packages =
+    (with pkgs; [
+      # generic
+      efm-langserver
+      # generic
+      prettierd
+      # yaml linting
+      yaml-language-server
+      # html, json, css, eslint
+      vscode-langservers-extracted
+      # toml
+      taplo
+      # nixfmt
+      nixfmt-rfc-style
+      # Type checking: comments and text
+      harper
+      # terraform
+      terraform-ls
+      # fast python linting
+      ruff
+    ])
+    ++
+      # Packages from unstable-pkgs
+      (with unstable-pkgs; [
+        # bash
+        bash-language-server
+        # Dockerfile
+        dockerfile-language-server-nodejs
+        # docker compose
+        docker-compose-language-service
+        # markdown
+        # - robust LS
+        marksman
+        # - grammar and spelling
+        ltex-ls-plus
+      ])
+    ++
+      # Python 3.12 Packages
+      (with pkgs.python312Packages; [
         # Python linting, using pylsp and ruff in the back
-        python-lsp-ruff))
-
-  ];
+        python-lsp-ruff
+      ]);
 
   programs.helix = {
     enable = true;
+    # Configure as default editor by setting `EDITOR` env. variable
+    defaultEditor = true;
     settings = {
-      # catppuccin_frappe catppuccin_macchiato catppuccin_latte onedark sonokai      
       theme = "onedark";
 
       editor = {
@@ -41,7 +76,10 @@
           render = true;
         };
 
-        shell = [ "fish" "-c" ];
+        shell = [
+          "fish"
+          "-c"
+        ];
         path-completion = true; # Suggest file paths as autocompletions
         auto-format = true; # Auto format on save
         completion-trigger-len = 1;
@@ -57,18 +95,36 @@
       };
 
       keys.normal = {
-        "esc" = [ "collapse_selection" ":w" ];
-        "y" = "yank_main_selection_to_clipboard";
-        "p" = "paste_clipboard_before";
+        "esc" = [
+          "collapse_selection"
+          ":w"
+        ];
+        # "Alt-u" = [ ];
+        # NOTE Should try to also customise the Shift-y and Shitf-p ones
+        # "y" = "yank_main_selection_to_clipboard";
+        # NOTE On delete: Yank to main clipboard
+        # "d" = ""
+        # NOTE On change: Yank to main clipboard
+        # "c" = ""
+        # NOTE Does this paste using main clipboard?
+        # "p" = "paste_clipboard_before";
       };
 
       keys.select = {
-        "esc" = [ "collapse_selection" "normal_mode" ":w" ];
-        "y" = "yank_main_selection_to_clipboard";
-        "p" = "paste_clipboard_before";
+        "esc" = [
+          "collapse_selection"
+          "normal_mode"
+          ":w"
+        ];
+        # "y" = "yank_main_selection_to_clipboard";
+        # "p" = "paste_clipboard_before";
       };
 
-      keys.insert = { "esc" = [ "normal_mode" ":w" ]; };
+      keys.insert = {
+        # NOTE Test "Don't save when coming out of the insert mode"
+        # "esc" = [ "normal_mode" ":w" ];
+        "esc" = [ "normal_mode" ];
+      };
 
       editor.file-picker = {
         hidden = false;
@@ -83,21 +139,64 @@
         "`" = "`";
         "<" = ">";
       };
-      editor.smart-tab = { enable = false; };
+      editor.smart-tab = {
+        enable = false;
+      };
     };
     languages = {
       language = [
         {
+          name = "hcl";
+          language-servers = [ "terraform-ls" ];
+          language-id = "terraform";
+        }
+        {
+          name = "tfvars";
+          language-servers = [ "terraform-ls" ];
+          language-id = "terraform-vars";
+        }
+        {
+          name = "markdown";
+          language-servers = [
+            "marksman"
+            "ltex-ls"
+          ];
+        }
+        {
+          name = "yaml";
+          auto-format = true;
+          formatter = {
+            command = "prettier";
+            args = [
+              "--parser"
+              "yaml"
+            ];
+          };
+        }
+        {
+          name = "toml";
+          formatter = {
+            command = "taplo";
+            args = [
+              "fmt"
+              "-"
+            ];
+          };
+        }
+        {
           name = "nix";
           auto-format = true;
-          formatter.command = "${pkgs.nixfmt}/bin/nixfmt";
+          formatter.command = "nixfmt";
         }
         {
           name = "typescript";
           language-servers = [
             {
               name = "efm";
-              only-features = [ "diagnostics" "format" ];
+              only-features = [
+                "diagnostics"
+                "format"
+              ];
             }
             {
               name = "typescript-language-server";
@@ -107,59 +206,45 @@
         }
       ];
       language-server = {
+        terraform-ls = {
+          command = "terraform-ls";
+          args = [ "serve" ];
+        };
+        vscode-json-language-server = {
+          config = {
+            provideFormatter = true;
+            json = {
+              keepLines = {
+                enable = true;
+              };
+            };
+          };
+        };
+        ltex-ls = {
+          config = {
+            ltex.disabledRules = {
+              en-US = [ "PROFANITY" ];
+              en-GB = [ "PROFANITY" ];
+            };
+            ltex.dictionary = {
+              en-US = [ "builtin" ];
+              en-GB = [ "builtin" ];
+            };
+          };
+        };
         yaml-language-server = {
           config = {
             yaml = {
-              format.enable = true;
+              format.enable = false;
               validation = true;
               schemas = {
-                "https://json.schemastore.org/github-workflow.json" =
-                  ".github/workflows/*.{yml,yaml}";
+                "https://json.schemastore.org/github-workflow.json" = ".github/workflows/*.{yml,yaml}";
                 "https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible-tasks.json" =
                   "roles/{tasks,handlers}/*.{yml,yaml}";
               };
             };
           };
         };
-        eslint = {
-          command =
-            "${pkgs.vscode-langservers-extracted}/bin/vscode-eslint-language-server";
-          config = {
-            format = true;
-            nodePath = "";
-            onIgnoredFiles = "off";
-            packageManager = "yarn";
-            quiet = false;
-            rulesCustomizations = [ ];
-            run = "onType";
-            useESLintClass = false;
-            validate = "on";
-            codeAction = {
-              disableRuleComment = {
-                enable = true;
-                location = "separateLine";
-              };
-              showDocumentation = { enable = true; };
-            };
-            codeActionOnSave = { mode = "all"; };
-            experimental = { };
-            problems = { shortenToSingleLine = false; };
-            workingDirectory = { mode = "auto"; };
-          };
-        };
-        json = {
-          command =
-            "${pkgs.vscode-langservers-extracted}/bin/vscode-json-language-server";
-        };
-        html = {
-          command =
-            "${pkgs.vscode-langservers-extracted}/bin/vscode-html-language-server";
-        };
-        css = {
-          command =
-            "${pkgs.vscode-langservers-extracted}/bin/vscode-css-language-server";
-        };
-        efm = { command = "${pkgs.efm-langserver}/bin/efm-langserver"; };
         harper-ls = {
           command = "harper-ls";
           args = [ "--stdio" ];
