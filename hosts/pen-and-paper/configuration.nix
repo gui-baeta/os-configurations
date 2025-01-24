@@ -2,7 +2,13 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, options, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  options,
+  ...
+}:
 
 {
   imports = [
@@ -12,17 +18,25 @@
 
   services.rpcbind.enable = true;
   services.nfs.server.enable = true;
-  systemd.mounts = [{
-    type = "nfs";
-    mountConfig = { Options = "noatime"; };
-    what = "LightBulb:/storage/Pictures";
-    where = "/mnt/NFS-Pictures";
-  }];
-  systemd.automounts = [{
-    wantedBy = [ "multi-user.target" ];
-    automountConfig = { TimeoutIdleSec = "600"; };
-    where = "/mnt/NFS-Pictures";
-  }];
+  systemd.mounts = [
+    {
+      type = "nfs";
+      mountConfig = {
+        Options = "noatime";
+      };
+      what = "LightBulb:/storage/Pictures";
+      where = "/mnt/NFS-Pictures";
+    }
+  ];
+  systemd.automounts = [
+    {
+      wantedBy = [ "multi-user.target" ];
+      automountConfig = {
+        TimeoutIdleSec = "600";
+      };
+      where = "/mnt/NFS-Pictures";
+    }
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -45,12 +59,23 @@
     "amdgpu.dcdebugmask=0x10"
     "amdgpu.dcdebugmask=0x200"
   ]; # "sdr" "psr" "psr"
-  boot.kernelModules = [ "amdgpu" "kvm-amd" ];
+  boot.kernelModules = [
+    "amdgpu"
+    "kvm-amd"
+  ];
   boot.extraModulePackages = [ ];
   boot.supportedFilesystems = [ "nfs" ]; # For NFS Client to work
 
-  boot.initrd.availableKernelModules =
-    [ "nfs" "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" "amdgpu" ];
+  boot.initrd.availableKernelModules = [
+    "nfs"
+    "xhci_pci"
+    "ahci"
+    "nvme"
+    "usb_storage"
+    "usbhid"
+    "sd_mod"
+    "amdgpu"
+  ];
 
   boot.initrd.luks.devices."luks-fe128010-0577-4daa-8a2e-1b43503da280".device =
     "/dev/disk/by-uuid/fe128010-0577-4daa-8a2e-1b43503da280";
@@ -86,8 +111,7 @@
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-  services.xserver.videoDrivers =
-    [ "modesetting" ]; # Either this or "amdgpu-pro"
+  services.xserver.videoDrivers = [ "modesetting" ]; # Either this or "amdgpu-pro"
 
   # Enable Screen Sharing
   xdg.portal.wlr.enable = true;
@@ -136,7 +160,10 @@
   users.users.guibaeta = {
     isNormalUser = true;
     description = "Guilherme Fontes";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
     shell = pkgs.fish;
     useDefaultShell = true;
 
@@ -289,12 +316,9 @@
 
   # Set aliases across sessions
   programs.fish.shellAliases = lib.mkForce {
-    gitwordschanged = ''
-      nix-shell -p git --run "git diff --word-diff=porcelain HEAD | grep -e '^[-+][^-+]' | wc -w"'';
-    gitwordsadded = ''
-      nix-shell -p git --run "git diff --word-diff=porcelain HEAD | grep -e '^+[^-+]' | wc -w"'';
-    list_profile_packages =
-      "nix-store --query --requisites /run/current-system | cut -d- -f2- | sort -u";
+    gitwordschanged = ''nix-shell -p git --run "git diff --word-diff=porcelain HEAD | grep -e '^[-+][^-+]' | wc -w"'';
+    gitwordsadded = ''nix-shell -p git --run "git diff --word-diff=porcelain HEAD | grep -e '^+[^-+]' | wc -w"'';
+    list_profile_packages = "nix-store --query --requisites /run/current-system | cut -d- -f2- | sort -u";
   };
 
   # programs.fish.interactiveShellInit = ''
@@ -302,12 +326,18 @@
   # '';
 
   # Most software has the HIP libraries hard-coded. You can work around it on NixOS by using:
-  systemd.tmpfiles.rules = let
-    rocmEnv = pkgs.symlinkJoin {
-      name = "rocm-combined";
-      paths = with pkgs.rocmPackages; [ rocblas hipblas clr ];
-    };
-  in [ "L+    /opt/rocm   -    -    -     -    ${rocmEnv}" ];
+  systemd.tmpfiles.rules =
+    let
+      rocmEnv = pkgs.symlinkJoin {
+        name = "rocm-combined";
+        paths = with pkgs.rocmPackages; [
+          rocblas
+          hipblas
+          clr
+        ];
+      };
+    in
+    [ "L+    /opt/rocm   -    -    -     -    ${rocmEnv}" ];
 
   hardware.cpu.amd.updateMicrocode = true;
   # hardware.enableRedistributableFirmware = true;
@@ -348,8 +378,7 @@
   # Force radv
   environment.variables.AMD_VULKAN_ICD = "RADV";
   # # Or
-  environment.variables.VK_ICD_FILENAMES =
-    "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+  environment.variables.VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
