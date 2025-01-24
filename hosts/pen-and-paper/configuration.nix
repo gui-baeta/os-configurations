@@ -323,7 +323,7 @@
       libva
 
       # Graphics with AMD open-source drivers
-      amdvlk
+      # amdvlk
 
       # OpenCL support through MESA
       mesa.opencl
@@ -337,11 +337,11 @@
     ];
 
     # For 32 bit applications
-    extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
+    # extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
   };
 
   # Enable Vulkan support with amdvlk drivers
-  hardware.amdgpu.amdvlk.enable = true;
+  # hardware.amdgpu.amdvlk.enable = true;
   # Enable AMD OpenCL support
   hardware.amdgpu.opencl.enable = true;
 
