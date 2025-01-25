@@ -43,6 +43,9 @@
         marksman
         # - grammar and spelling
         ltex-ls-plus
+
+        # typst
+        tinymist
       ])
     ++
       # Python 3.12 Packages
