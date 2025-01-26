@@ -20,8 +20,16 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nix-index-database
-    , ... }@inputs: {
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nixpkgs-unstable,
+      home-manager,
+      nix-index-database,
+      ...
+    }@inputs:
+    {
       # Please replace my-nixos with your hostname
       nixosConfigurations.pen-and-paper = nixpkgs.lib.nixosSystem rec {
         system = "x86_64-linux";
@@ -63,7 +71,10 @@
           { programs.nix-index-database.comma.enable = true; }
         ];
 
-        specialArgs = { inherit inputs; };
+        specialArgs = {
+          inherit inputs;
+          unstable-pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux;
+        };
       };
     };
 }
