@@ -164,6 +164,12 @@
             "marksman"
             "ltex-ls"
           ];
+          # Remove trailing whitespaces. See: https://www.reddit.com/r/HelixEditor/comments/1c9lg73/highlight_trailing_whitespace_only/
+          formatter = {
+            command = "sed";
+            args = [ "s/[[:space:]]*$//" ];
+          };
+          auto-format = true;
         }
         {
           name = "yaml";
