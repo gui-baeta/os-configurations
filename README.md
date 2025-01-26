@@ -1,11 +1,18 @@
-### This Repo is
+## This Repo is
 My NixOS configs, and in general Nix related configs
 
-### TODO
-- [ ] Configure nixfmt. See: [nixfmt GitHub](https://github.com/NixOS/nixfmt)
-- [ ] Using something like Vim seems practical a lot of times. See: [Helix Editor](https://helix-editor.com/)
-    - [ ] If actually going to Vim. For ideas and as a reference: [From JetBrains to Vim: A modern Vim configuration and plugin set](https://medium.com/@devsjc/from-jetbrains-to-vim-a-modern-vim-configuration-and-plugin-set-d58472a7d53d)
-- [ ] On transition to Flakes, read and follow: [Setting up my machines Nix-style](https://aldoborrero.com/posts/2023/01/15/setting-up-my-machines-nix-style/)
-    - [ ] Also follow this complete guide: [NixOS with Flakes enabled](https://nixos-and-flakes.thiscute.world/nixos-with-flakes/nixos-with-flakes-enabled)
-### Maybe
+## TODO
+- [ ] Firefox config
+
+### Firefox Config
+For sures:
+ - browser.urlbar.resultMenu.keyboardAccessible:false
+ - browser.urlbar.resultMenu:false
+See:
+ - [gitlab.usmcamp0811/dotfiles: default.nix](https://gitlab.com/usmcamp0811/dotfiles/-/blob/fb584a888680ff909319efdcbf33d863d0c00eaa/modules/home/apps/firefox/default.nix)
+ - [Misterio77/nixos-hyprland-hm-vm: home.nix](https://github.com/Misterio77/nixos-hyprland-hm-vm/blob/8b8283bb4562f9336cf23492ec5df2e79500efab/home.nix#L8)
+ - [Misterio77/nix-config: firefox.nix](https://github.com/Misterio77/nix-config/blob/07ecc5286561910b9604014a26c24517bf583242/home/gabriel/features/desktop/common/firefox.nix#L7)
+ - [Misterio77/home-manager: firefox.nix module](https://github.com/Misterio77/home-manager/blob/1c2c5e4cabba4c43504ef0f8cc3f3dfa284e2dbb/modules/programs/firefox.nix#L17)
+
+###### Cool, Interesting, Not A Priority
 - [ ] Configure cache: [How to set up a Nix binary cache with Terraform in DigitalOcean & Cloudflare](https://aldoborrero.com/posts/2022/11/25/how-to-set-up-a-nix-binary-cache-with-terraform-in-digitalocean--cloudflare/)
