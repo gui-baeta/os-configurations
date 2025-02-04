@@ -69,5 +69,6 @@
     ])
     ++ (with unstable-pkgs; [
       # Unstable pkgs here
+      rnote
     ]);
 }
