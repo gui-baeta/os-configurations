@@ -173,14 +173,21 @@
         }
         {
           name = "yaml";
-          auto-format = true;
+
+          # Remove trailing whitespaces
           formatter = {
-            command = "prettier";
-            args = [
-              "--parser"
-              "yaml"
-            ];
+            command = "sed";
+            args = [ "s/[[:space:]]*$//" ];
           };
+          auto-format = true;
+
+          # formatter = {
+          #   command = "prettier";
+          #   args = [
+          #     "--parser"
+          #     "yaml"
+          #   ];
+          # };
         }
         {
           name = "toml";
