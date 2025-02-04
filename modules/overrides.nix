@@ -53,7 +53,7 @@
       [org.gnome.desktop.interface]
       gtk-enable-primary-paste=false
       show-battery-percentage=false
-      text-scaling-factor=1.25
+      text-scaling-factor=1.0
       show-battery-percentage=false
 
       [org.gnome.shell]
