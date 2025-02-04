@@ -239,9 +239,6 @@
     # support both 32- and 64-bit applications
     wineWowPackages.stable
 
-    # Screen sharing compatibility with X11
-    xwaylandvideobridge
-
     # Development
     distrobox
     podman

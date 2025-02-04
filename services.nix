@@ -20,8 +20,19 @@
 
   services.nfs.server.enable = true;
   services.nfs.server.exports = ''
-    /storage/Pictures         PenAndPaper(rw,async,no_subtree_check)
+    /storage/Pictures         pen-and-paper(rw,sync,no_subtree_check,no_root_squash)
   '';
 
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    # require public key authentication for better security
+    settings.PasswordAuthentication = false;
+    settings.KbdInteractiveAuthentication = false;
+  };
+
+  # Enable the ClamAV service and keep the database up to date
+  services.clamav = {
+    daemon.enable = true;
+    updater.enable = true;
+  };
 }

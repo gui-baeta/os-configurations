@@ -8,7 +8,9 @@
     extraGroups = [ "networkmanager" "wheel" "gamemode" ];
     shell = pkgs.fish;
     useDefaultShell = true;
-
+    openssh.authorizedKeys.keys = [
+    	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILKAU5lq//NVCZ7pNvCmDppdWuqqN7ctFFm3a6PasNzt guibaeta"
+    ];
     packages = with pkgs; [
       # Browsers
       firefox
