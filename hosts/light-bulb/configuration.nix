@@ -16,13 +16,9 @@
     ./hardware-configuration.nix
   ];
 
-
-
   # ===================================
   # Services
   # ===================================
-
-
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -57,31 +53,37 @@
     };
   };
 
-
-
-
-
-
-
-
   # ===================================
   # Boot and Kernel
   # ===================================
-
-
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelParams = [ "amd_iommu=pt" "iommu=soft" "pcie_aspm=off" ];
-  boot.kernelModules = [ "amdgpu" "btusb" ];
+  boot.kernelParams = [
+    "amd_iommu=pt"
+    "iommu=soft"
+    "pcie_aspm=off"
+  ];
+  boot.kernelModules = [
+    "amdgpu"
+    "btusb"
+  ];
   boot.extraModulePackages = [ ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" "amdgpu" "btusb" ];
+  boot.initrd.availableKernelModules = [
+    "xhci_pci"
+    "ahci"
+    "nvme"
+    "usb_storage"
+    "usbhid"
+    "sd_mod"
+    "amdgpu"
+    "btusb"
+  ];
   boot.initrd.kernelModules = [ "btusb" ];
-
 
   # To not need to retype Disk encryption password for each disk
   boot.initrd.luks.reusePassphrases = true;
@@ -95,33 +97,23 @@
     };
   };
 
-
   # Some system level tweaks
   boot.kernel.sysctl = {
 
-    # Virtual Memory maximum allocation per process. 
+    # Virtual Memory maximum allocation per process.
     # Improves compatibility with applications that allocate a lot of memory, like modern games
     "vm.max_map_count" = 2097152;
 
     # # The maximum receive socket buffer size in bytes
     # "net.core.rmem_max" = 4194304;
 
-    # # The maximum send socket buffer size in bytes 
+    # # The maximum send socket buffer size in bytes
     # "net.core.wmem_max" = 1048576;
   };
-
-
-
-
-
-
-
 
   # ===================================
   # Network
   # ===================================
-
-
 
   networking.hostName = "light-bulb"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -133,39 +125,31 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
-   # Enable IPv6 globally (May want to manually disable for each VPN connection, if the provider doesn't support it)
+  # Enable IPv6 globally (May want to manually disable for each VPN connection, if the provider doesn't support it)
   networking.enableIPv6 = true;
 
   # Some Firewall Rules
-  networking.firewall.allowedTCPPorts = [ 
-    # Spotify - To sync local tracks from your filesystem with mobile devices 
-    # in the same network, need to open port 57621: 
-    57621 
+  networking.firewall.allowedTCPPorts = [
+    # Spotify - To sync local tracks from your filesystem with mobile devices
+    # in the same network, need to open port 57621:
+    57621
     # For BitTorrent
-    51413 
+    51413
 
     # NFSv4
     2049
   ];
 
-  networking.firewall.allowedUDPPorts = [ 
+  networking.firewall.allowedUDPPorts = [
     # In order to enable discovery of Google Cast devices (and possibly other Spotify Connect devices) in the same network by the Spotify app, need to open UDP port 5353:
-    5353 
+    5353
     # BitTorrent
-    51413 
+    51413
   ];
-
-
-
-
-
-
-
 
   # ===================================
   # Input
   # ===================================
-
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
@@ -173,18 +157,9 @@
   # Logitech Devices (Mouse, etc)
   hardware.logitech.wireless.enable = true;
 
-
-
-
-
-
-
-
   # ===================================
   # Localisation
   # ===================================
-
-
 
   # Set your time zone.
   time.timeZone = "Europe/Lisbon";
@@ -216,13 +191,9 @@
   # Configure console keymap
   console.keyMap = "pt-latin1";
 
-
-
-
   # ===================================
   # GRAPHICS
   # ===================================
-
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -284,7 +255,6 @@
   # # Most software has the HIP libraries hard-coded. You can work around it on NixOS by using:
   # systemd.tmpfiles.rules = [ "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages.clr}" ];
 
-
   hardware.cpu.amd.updateMicrocode = true;
   # NOTE Needed?
   # hardware.enableRedistributableFirmware = true;
@@ -301,19 +271,9 @@
   # # Or
   environment.variables.VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
 
-
-
-
-
-
-
-
-
-
   # ===================================
   # Virtualisation
   # ===================================
-
 
   # Container virtualization functionality
   virtualisation.containers.enable = true;
@@ -330,18 +290,12 @@
   programs.virt-manager.enable = true;
 
   virtualisation.spiceUSBRedirection.enable = true;
-  # NOTE The ABOVE is same as THIS? 
+  # NOTE The ABOVE is same as THIS?
   # security.wrappers.spice-client-glib-usb-acl-helper.source = "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
-
-
-
-
-
 
   # ===================================
   # Some programs
   # ===================================
-
 
   # Keys and Signing
   programs.gnupg = {
@@ -351,7 +305,6 @@
       enableBrowserSocket = false;
     };
   };
-
 
   # Fish shell
   programs.fish.enable = true;
@@ -368,11 +321,9 @@
   # Direnv - To automatically setup nix shells when entering a project directory
   programs.direnv.enable = true;
 
-
   # NOTE Interesting
   # Git
   programs.git.enable = true;
-
 
   # Fix some linking problems
   programs.nix-ld.enable = true;
@@ -386,17 +337,10 @@
   programs.kdeconnect.enable = true;
   programs.kdeconnect.package = pkgs.gnomeExtensions.gsconnect;
 
-
-
-
-
-
-
   # ===================================
   # Steam/Games related
   # ===================================
 
-  
   # Java - For Steam
   programs.java.enable = true;
 
@@ -414,124 +358,125 @@
   nixpkgs.config.packageOverrides = pkgs: {
     steam = pkgs.steam.override {
       extraProfile = ''unset VK_ICD_FILENAMES'';
-      extraPkgs = pkgs: with pkgs; [
-        xorg.libXcursor
-        xorg.libXi
-        xorg.libXinerama
-        xorg.libXScrnSaver
-        libpng
-        libpulseaudio
-        libvorbis
-        stdenv.cc.cc.lib
-        libkrb5
-        keyutils
-        dxvk
-      ];
+      extraPkgs =
+        pkgs: with pkgs; [
+          xorg.libXcursor
+          xorg.libXi
+          xorg.libXinerama
+          xorg.libXScrnSaver
+          libpng
+          libpulseaudio
+          libvorbis
+          stdenv.cc.cc.lib
+          libkrb5
+          keyutils
+          dxvk
+        ];
     };
   };
 
   # Extra Packages for Linking
-  programs.nix-ld.libraries = options.programs.nix-ld.libraries.default ++ (with pkgs; 
-      [ stdenv.cc.cc
-        openssl
-        xorg.libXcomposite
-        xorg.libXtst
-        xorg.libXrandr
-        xorg.libXext
-        xorg.libX11
-        xorg.libXfixes
-        libGL
-        libva
-        pipewire
-        xorg.libxcb
-        xorg.libXdamage
-        xorg.libxshmfence
-        xorg.libXxf86vm
-        libelf
-        
-        # Required
-        glib
-        gtk2
-        bzip2
-        
-        # Without these it silently fails
-        xorg.libXinerama
-        xorg.libXcursor
-        xorg.libXrender
-        xorg.libXScrnSaver
-        xorg.libXi
-        xorg.libSM
-        xorg.libICE
-        gnome2.GConf
-        nspr
-        nss
-        cups
-        libcap
-        SDL2
-        libusb1
-        dbus-glib
-        ffmpeg
-        # Only libraries are needed from those two
-        libudev0-shim
-        
-        # Verified games requirements
-        xorg.libXt
-        xorg.libXmu
-        libogg
-        libvorbis
-        SDL
-        SDL2_image
-        glew110
-        libidn
-        tbb
-        
-        # Other things from runtime
-        flac
-        freeglut
-        libjpeg
-        libpng
-        libpng12
-        libsamplerate
-        libmikmod
-        libtheora
-        libtiff
-        pixman
-        speex
-        SDL_image
-        SDL_ttf
-        SDL_mixer
-        SDL2_ttf
-        SDL2_mixer
-        libappindicator-gtk2
-        libdbusmenu-gtk2
-        libindicator-gtk2
-        libcaca
-        libcanberra
-        libgcrypt
-        libvpx
-        librsvg
-        xorg.libXft
-        libvdpau
-        gnome2.pango
-        cairo
-        atk
-        gdk-pixbuf
-        fontconfig
-        freetype
-        dbus
-        alsa-lib
-        expat
-        # Needed for electron
-        libdrm
-        mesa
-        libxkbcommon ]);
+  programs.nix-ld.libraries =
+    options.programs.nix-ld.libraries.default
+    ++ (with pkgs; [
+      stdenv.cc.cc
+      openssl
+      xorg.libXcomposite
+      xorg.libXtst
+      xorg.libXrandr
+      xorg.libXext
+      xorg.libX11
+      xorg.libXfixes
+      libGL
+      libva
+      pipewire
+      xorg.libxcb
+      xorg.libXdamage
+      xorg.libxshmfence
+      xorg.libXxf86vm
+      libelf
 
+      # Required
+      glib
+      gtk2
+      bzip2
 
+      # Without these it silently fails
+      xorg.libXinerama
+      xorg.libXcursor
+      xorg.libXrender
+      xorg.libXScrnSaver
+      xorg.libXi
+      xorg.libSM
+      xorg.libICE
+      gnome2.GConf
+      nspr
+      nss
+      cups
+      libcap
+      SDL2
+      libusb1
+      dbus-glib
+      ffmpeg
+      # Only libraries are needed from those two
+      libudev0-shim
+
+      # Verified games requirements
+      xorg.libXt
+      xorg.libXmu
+      libogg
+      libvorbis
+      SDL
+      SDL2_image
+      glew110
+      libidn
+      tbb
+
+      # Other things from runtime
+      flac
+      freeglut
+      libjpeg
+      libpng
+      libpng12
+      libsamplerate
+      libmikmod
+      libtheora
+      libtiff
+      pixman
+      speex
+      SDL_image
+      SDL_ttf
+      SDL_mixer
+      SDL2_ttf
+      SDL2_mixer
+      libappindicator-gtk2
+      libdbusmenu-gtk2
+      libindicator-gtk2
+      libcaca
+      libcanberra
+      libgcrypt
+      libvpx
+      librsvg
+      xorg.libXft
+      libvdpau
+      gnome2.pango
+      cairo
+      atk
+      gdk-pixbuf
+      fontconfig
+      freetype
+      dbus
+      alsa-lib
+      expat
+      # Needed for electron
+      libdrm
+      mesa
+      libxkbcommon
+    ]);
 
   # ===================================
   # Extra System Packages
   # ===================================
-
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -551,7 +496,7 @@
 
     # Lutris
     (lutris.override {
-      extraLibraries =  pkgs: [
+      extraLibraries = pkgs: [
         # List library dependencies here
       ];
 
@@ -564,20 +509,9 @@
     gthumb
   ];
 
-
-
-
-
-
-
-
-
-
   # ===================================
   # User/Users Config
   # ===================================
-
-
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.guibaeta = {
@@ -592,7 +526,7 @@
     useDefaultShell = true;
 
     openssh.authorizedKeys.keys = [
-    	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILKAU5lq//NVCZ7pNvCmDppdWuqqN7ctFFm3a6PasNzt guibaeta"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILKAU5lq//NVCZ7pNvCmDppdWuqqN7ctFFm3a6PasNzt guibaeta"
     ];
 
     packages = with pkgs; [
@@ -680,10 +614,6 @@
     ];
   };
 
-
-
-
-
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
@@ -693,4 +623,3 @@
   system.stateVersion = "23.11"; # Did you read the comment?
 
 }
-
