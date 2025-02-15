@@ -82,5 +82,34 @@
           };
         };
       };
+
+      nixosConfigurations.light-bulb = nixpkgs.lib.nixosSystem rec {
+        system = "x86_64-linux";
+        modules = [
+          "${self}/modules/."
+          "${self}/hosts/light-bulb/configuration.nix"
+
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.guibaeta = import "${self}/modules/home/.";
+
+              extraSpecialArgs = {
+                unstable-pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux;
+              };
+            };
+          }
+
+          nix-index-database.nixosModules.nix-index
+          { programs.nix-index-database.comma.enable = true; }
+        ];
+
+        specialArgs = {
+          inherit inputs;
+          unstable-pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux;
+        };
+      };
     };
 }
