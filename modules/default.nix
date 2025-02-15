@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   unstable-pkgs,
   inputs,
@@ -24,7 +25,13 @@
   # Allow unfree packages
   nixpkgs.config = {
     allowUnfree = true;
-    allowUnfreePredicate = true;
+    # allowUnfreePredicate = true;
+
+    allowUnfreePredicate =
+      pkg:
+      builtins.elem (lib.getName pkg) [
+        "vmware-horizon-client"
+      ];
   };
 
   nix = {

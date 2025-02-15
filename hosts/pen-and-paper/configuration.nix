@@ -5,6 +5,7 @@
 {
   config,
   pkgs,
+  unstable-pkgs,
   lib,
   options,
   ...
@@ -255,7 +256,7 @@
       sticky-notes
 
       # Virtual Desktop Infrastructure Client
-      # vmware-horizon-client
+      vmware-horizon-client
     ];
   };
 
