@@ -57,7 +57,10 @@
                 #   - https://github.com/chris-martin/home/blob/dc79903c93f654108ea3c05cfd779bdef72eb584/os/home/modules/packages.nix
                 #   - https://www.reddit.com/r/NixOS/comments/12ewa4j/newbie_how_to_use_unstable_packages_in/
                 #   - Search more
-                unstable-pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux;
+                unstable-pkgs = import nixpkgs-unstable {
+                  inherit system;
+                  config.allowUnfree = true;
+                };
 
                 # FIXME Dont know how to use it in flake. Put in module
                 #   inherit inputs;
@@ -73,7 +76,10 @@
 
         specialArgs = {
           inherit inputs;
-          unstable-pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux;
+          unstable-pkgs = import nixpkgs-unstable {
+            inherit system;
+            config.allowUnfree = true;
+          };
         };
       };
     };
