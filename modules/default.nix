@@ -61,6 +61,15 @@
         id = "nixpkgs";
         type = "indirect";
       };
+      to = {
+        type = "path";
+        path = pkgs.path;
+        narHash = builtins.readFile (
+          pkgs.runCommandLocal "get-nixpkgs-hash" {
+            nativeBuildInputs = [ pkgs.nix ];
+          } "nix-hash --type sha256 --sri ${pkgs.path} > $out"
+        );
+      };
       flake = inputs.nixpkgs;
     };
   };
