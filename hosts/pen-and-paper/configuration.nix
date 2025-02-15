@@ -173,9 +173,6 @@
     useDefaultShell = true;
 
     packages = with pkgs; [
-      # Management Tools
-      git
-
       # Browsers
       (pkgs.symlinkJoin {
         name = "firefox-overlay";
