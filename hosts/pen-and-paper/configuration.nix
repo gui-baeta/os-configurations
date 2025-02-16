@@ -56,10 +56,47 @@
   # });
 
   boot.kernelParams = [
+    #
+    # No need to set "cik_support" or "si_support" sub flags of "amdgpu"/"radeon"
+    # since my GPU is "renoir", of Vega series (2020)
+    #
+
+    #
+    # Override for dynamic power management setting (0 = disable, 1 = enable)
+    # The default is -1 (auto).
+    "amdgpu.dpm=1"
+    #
+    # Override the default ABM (Adaptive Backlight Management) level used for DC enabled hardware.
+    # Requires DMCU to be supported and loaded. Valid levels are 0-4.
+    # A value of 0 indicates that ABM should be disabled by default. Values 1-4 control the maximum allowable brightness reduction via the ABM algorithm, with 1 being the least reduction and 4 being the most reduction.
+    # Defaults to -1, or auto. Userspace can only override this level after boot if it’s set to auto.
     "amdgpu.abmlevel=0"
-    "amdgpu.dcdebugmask=0x10"
-    "amdgpu.dcdebugmask=0x200"
-  ]; # "sdr" "psr" "psr"
+
+    # =======
+    # Override display features enabled.
+    #
+    # See enum DC_DEBUG_MASK in drivers/gpu/drm/amd/include/amd_shared.h:
+    #     https://docs.kernel.org/gpu/amdgpu/driver-core.html#c.DC_DEBUG_MASK
+    # Source Code:
+    #     https://github.com/torvalds/linux/blob/master/drivers/gpu/drm/amd/include/amd_shared.h#L259
+    # =======
+    #
+    # If set, disable Panel self refresh v1 and PSR-SU
+    "amdgpu.dcdebugmask=0x10" # (DC_DISABLE_PSR)
+    # Just in case, disable PSR-SU specifically
+    # Disable PanelSelfRrefresh2 with the following kernel parameter amdgpu.dcdebugmask=0x200
+    # eDP display is the display my laptop uses, you can check it by running xrandr
+    "amdgpu.dcdebugmask=0x200" # (DC_DISABLE_PSR_SU)
+    #
+    # Stutter mode is a power saving feature on GPUs
+    # If set, disable memory stutter mode
+    "amdgpu.dcdebugmask=0x2" # (DC_DISABLE_STUTTER)
+    #
+    # Disable panel fractional PWM
+    # Some LED panel drivers might not like fractional PWM, and backlight flickering may be observed.
+    # Disabled by default
+    "amdgpu.dcfeaturemask=0x4" # (DC_DISABLE_FRACTIONAL_PWM_MASK)
+  ];
   boot.kernelModules = [
     "amdgpu"
     "kvm-amd"
@@ -112,7 +149,13 @@
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-  services.xserver.videoDrivers = [ "modesetting" ]; # Either this or "amdgpu-pro"
+
+  #
+  # Video drivers for X
+  # Should not use "amdgpu", useful when no compositor is used.
+  # See: https://github.com/NixOS/nixpkgs/pull/218437
+  # "modesetting" (Kernel Mode Setting) uses Mesa drivers directly
+  services.xserver.videoDrivers = [ "modesetting" ];
 
   # Enable Screen Sharing
   xdg.portal.wlr.enable = true;
@@ -159,7 +202,8 @@
   services.printing.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  services.libinput.enable = true;
+  services.libinput.touchpad.tapping = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.guibaeta = {
@@ -323,10 +367,6 @@
     list_profile_packages = "nix-store --query --requisites /run/current-system | cut -d- -f2- | sort -u";
   };
 
-  # programs.fish.interactiveShellInit = ''
-  #   direnv hook fish | source
-  # '';
-
   # Most software has the HIP libraries hard-coded. You can work around it on NixOS by using:
   systemd.tmpfiles.rules =
     let
@@ -342,45 +382,56 @@
     [ "L+    /opt/rocm   -    -    -     -    ${rocmEnv}" ];
 
   hardware.cpu.amd.updateMicrocode = true;
-  # hardware.enableRedistributableFirmware = true;
+  hardware.enableRedistributableFirmware = true;
   hardware.enableAllFirmware = true;
+
+  #
+  # No need to enable legacy support.
+  # This card is newer than Southern Islands (Radeon HD 7000) series and Sea Islands (Radeon HD 8000) series cards
+  # This enables use of `amdgpu` kernel driver for legacy hardware
+  hardware.amdgpu.legacySupport.enable = false;
+
+  #
+  # Do not use AMDVLK drivers for Vulkan support
+  # If enabled, adds the necessary packages to `hardware.graphics.extraPackages[32]`
+  # See: https://github.com/NixOS/nixpkgs/blob/nixos-24.11/nixos/modules/services/hardware/amdvlk.nix
+  hardware.amdgpu.amdvlk.enable = false;
+  # ...Prefer RADV drivers, provided by Mesa
+
+  #
+  # OpenCL support using AMD ROCM runtime library
+  # Adds the necessary {packages}"rocmPackages.clr{.icd}" to {config}`hardware.graphics.extraPackages`
+  hardware.amdgpu.opencl.enable = true;
+
+  #
+  # Adds "amdgpu" kernel module to to initrd
+  # hardware.amdgpu.initrd.enable = true;
 
   hardware.graphics = {
     enable = true;
     enable32Bit = true; # For 32 bit applications
 
     extraPackages = with pkgs; [
-      rocmPackages.clr.icd
-      # Enable Video Accelaration API
+      # Video Accelaration library
       libva
-
-      # Graphics with AMD open-source drivers
-      # amdvlk
-
-      # OpenCL support through MESA
-      mesa.opencl
-      # FIXME
-      # Note: at some point GPUs in the R600 family and newer
-      # may need to replace this with the "rusticl" ICD;
-      # and GPUs in the R500-family and older may need to
-      # pin the package version or backport Clover
-      # - https://www.phoronix.com/news/Mesa-Delete-Clover-Discussion
-      # - https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/19385
+      libvdpau
+      vaapiVdpau
+      libvdpau-va-gl
     ];
 
     # For 32 bit applications
-    # extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
+    extraPackages32 = with pkgs; [ ];
   };
 
-  # Enable Vulkan support with amdvlk drivers
-  # hardware.amdgpu.amdvlk.enable = true;
-  # Enable AMD OpenCL support
-  hardware.amdgpu.opencl.enable = true;
+  environment.variables = {
+    "VDPAU_DRIVER" = "radeonsi";
+    "LIBVA_DRIVER_NAME" = "radeonsi";
+  };
 
   # Force radv
-  environment.variables.AMD_VULKAN_ICD = "RADV";
+  # environment.variables.AMD_VULKAN_ICD = "RADV";
   # # Or
-  environment.variables.VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+  # environment.variables.VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
