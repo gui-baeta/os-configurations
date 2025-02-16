@@ -46,6 +46,8 @@
 
         # typst
         tinymist
+        # Nix LS
+        nil
       ])
     ++
       # Python 3.12 Packages
