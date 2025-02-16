@@ -112,6 +112,18 @@
   };
 
   # ===================================
+  # Systemd
+  # ===================================
+
+  # Disable suspend entirely
+  systemd.sleep.extraConfig = ''
+    AllowSuspend=no
+    AllowHibernation=no
+    AllowHybridSleep=no
+    AllowSuspendThenHibernate=no
+  '';
+
+  # ===================================
   # Network
   # ===================================
 
@@ -151,7 +163,8 @@
   # Input
   # ===================================
 
-  # Enable touchpad support (enabled default in most desktopManager).
+  # Enable device input support
+  # Enabled by default in desktopManager.gnome
   services.libinput.enable = true;
 
   # Logitech Devices (Mouse, etc)
