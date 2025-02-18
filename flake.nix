@@ -98,9 +98,11 @@
               useUserPackages = true;
               users.guibaeta = import "${self}/modules/home/.";
 
-              unstable-pkgs = import nixpkgs-unstable {
-                inherit system;
-                config.allowUnfree = true;
+              extraSpecialArgs = {
+                unstable-pkgs = import nixpkgs-unstable {
+                  inherit system;
+                  config.allowUnfree = true;
+                };
               };
             };
           }
