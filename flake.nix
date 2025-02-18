@@ -89,7 +89,7 @@
         system = "x86_64-linux";
         modules = [
           "${self}/modules/."
-          "${self}/hosts/light-bulb/configuration.nix"
+          "${self}/hosts/light-bulb/."
 
           home-manager.nixosModules.home-manager
           {
