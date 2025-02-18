@@ -32,10 +32,15 @@
 
   # Enable openSSH server
   services.openssh = {
+    startWhenNeeded = true;
     enable = true;
     # require public key authentication for better security
-    settings.PasswordAuthentication = false;
-    settings.KbdInteractiveAuthentication = false;
+    settings = {
+      X11Forwarding = true;
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      PermitRootLogin = "prohibit-password";
+    };
   };
 
   hardware.bluetooth.enable = true;
@@ -526,6 +531,11 @@
   # User/Users Config
   # ===================================
 
+  users.users.root = {
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILKAU5lq//NVCZ7pNvCmDppdWuqqN7ctFFm3a6PasNzt guibaeta"
+    ];
+  };
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.guibaeta = {
     isNormalUser = true;
