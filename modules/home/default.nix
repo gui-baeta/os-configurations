@@ -1,7 +1,10 @@
 { config, unstable-pkgs, ... }:
 
 {
-  imports = [ ./helix-editor.nix ];
+  imports = [
+    ./helix-editor.nix
+    ./mpv.nix
+  ];
 
   programs.home-manager.enable = true;
 
