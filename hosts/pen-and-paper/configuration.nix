@@ -308,6 +308,8 @@
     57621
     # For BitTorrent
     51413
+    # Transmission remote connection
+    9091
   ];
 
   networking.firewall.allowedUDPPorts = [
@@ -315,6 +317,8 @@
     5353
     # BitTorrent
     51413
+    # Transmission remote connection
+    9091
   ];
 
   # Fish shell
