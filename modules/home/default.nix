@@ -1,4 +1,4 @@
-{ config, unstable-pkgs, ... }:
+{ ... }:
 
 {
   imports = [
