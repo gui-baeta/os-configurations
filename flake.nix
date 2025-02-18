@@ -38,6 +38,7 @@
           # TODO Put things from configuration.nix in modules when possible
           "${self}/modules/."
           "${self}/hosts/pen-and-paper/configuration.nix"
+          "${self}/hosts/common.nix"
 
           home-manager.nixosModules.home-manager
           {
@@ -90,6 +91,7 @@
         modules = [
           "${self}/modules/."
           "${self}/hosts/light-bulb/."
+          "${self}/hosts/common.nix"
 
           home-manager.nixosModules.home-manager
           {
