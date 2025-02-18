@@ -3,11 +3,8 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 {
-  config,
   pkgs,
-  unstable-pkgs,
   lib,
-  options,
   ...
 }:
 

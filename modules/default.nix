@@ -1,8 +1,6 @@
 {
-  config,
   lib,
   pkgs,
-  unstable-pkgs,
   inputs,
   ...
 }:
@@ -14,6 +12,7 @@
     ./fonts.nix
     ./sound.nix
     ./overrides.nix
+    ./quirks.nix
 
     # TODO Eventually, for created modules
     # ../modules
