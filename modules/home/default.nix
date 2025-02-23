@@ -4,6 +4,7 @@
   imports = [
     ./helix-editor.nix
     ./mpv.nix
+    ./ncspot.nix
   ];
 
   programs.home-manager.enable = true;
