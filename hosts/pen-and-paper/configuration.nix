@@ -224,16 +224,12 @@
         '';
       })
       google-chrome
-      brave
 
       # Note Taking
       obsidian
 
       # Multi-purpose Calculator App
       qalculate-gtk
-
-      # MPV but pretty
-      celluloid
 
       stremio
 
