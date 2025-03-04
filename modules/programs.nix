@@ -74,5 +74,21 @@
     ++ (with unstable-pkgs; [
       # Unstable pkgs here
       rnote
+      (pkgs.symlinkJoin {
+        name = "vkdt-overlay";
+        paths = [ unstable-pkgs.vkdt ];
+        buildInputs = [
+          pkgs.makeWrapper
+          pkgs.exiftool
+        ];
+        postBuild = ''
+          wrapProgram $out/bin/vkdt --prefix PATH: "${
+            lib.makeBinPath [
+              pkgs.exiftool
+            ]
+          }"
+        '';
+      })
+      ansel
     ]);
 }
