@@ -45,6 +45,14 @@
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
+
+      # AMD ROCm and CUDA related
+      # SEE: https://github.com/nixos-rocm/nixos-rocm
+      extra-sandbox-paths = [
+        "/dev/kfd"
+        "/sys/devices/virtual/kfd"
+        "/dev/dri/renderD128"
+      ];
     };
     # Automatic garbage collection weekly
     gc = {
