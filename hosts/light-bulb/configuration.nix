@@ -216,6 +216,7 @@
 
     extraPackages = with pkgs; [
       rocmPackages.clr.icd
+      rocmPackages.clr
       # Enable Video Accelaration API
       libva
 
