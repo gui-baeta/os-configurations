@@ -61,7 +61,8 @@
     #
     # Override for dynamic power management setting (0 = disable, 1 = enable)
     # The default is -1 (auto).
-    "amdgpu.dpm=1"
+    # NOTE DISABLING THIS TO SEE IF BATTERY AUTONOMY IMPROVES
+    # "amdgpu.dpm=1"
     #
     # Override the default ABM (Adaptive Backlight Management) level used for DC enabled hardware.
     # Requires DMCU to be supported and loaded. Valid levels are 0-4.
@@ -87,7 +88,9 @@
     #
     # Stutter mode is a power saving feature on GPUs
     # If set, disable memory stutter mode
-    "amdgpu.dcdebugmask=0x2" # (DC_DISABLE_STUTTER)
+    # NOTE DISABLING THIS TO SEE IF BATTERY AUTONOMY IMPROVES
+    # "amdgpu.dcdebugmask=0x2" # (DC_DISABLE_STUTTER)
+
     #
     # Disable panel fractional PWM
     # Some LED panel drivers might not like fractional PWM, and backlight flickering may be observed.
