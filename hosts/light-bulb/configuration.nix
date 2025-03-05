@@ -487,9 +487,6 @@
     # Epic Games/ GOG / Amazon Games Launcher Linux Alternative
     heroic
 
-    # Logitech Devices GUI Manager
-    solaar
-
     # Additional tools for game launching tweaks
     gamescope
     mangohud

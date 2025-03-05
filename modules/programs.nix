@@ -22,7 +22,7 @@
       #nile
 
       # Logitech Devices GUI Manager
-      #solaar
+      solaar
 
       gnome-tweaks
       dconf-editor
