@@ -412,6 +412,9 @@
     enable32Bit = true; # For 32 bit applications
 
     extraPackages = with pkgs; [
+      rocmPackages.clr.icd
+      rocmPackages.clr
+
       # Video Accelaration library
       libva
       libvdpau
