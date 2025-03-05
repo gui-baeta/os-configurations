@@ -16,6 +16,8 @@
     corefonts
     vistafonts
 
+    # TODO Add Netflix Sans Medium (to be used in mpv)
+    # NOTE Maybe do this in the mpv module?
     noto-fonts
     noto-fonts-cjk-sans
     noto-fonts-emoji
