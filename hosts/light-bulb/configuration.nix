@@ -268,7 +268,7 @@
 
   # Force radv
   environment.variables.AMD_VULKAN_ICD = "RADV";
-  # # Or
+  # Or
   environment.variables.VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
 
   # ===================================
@@ -296,15 +296,6 @@
   # ===================================
   # Some programs
   # ===================================
-
-  # Keys and Signing
-  programs.gnupg = {
-    agent = {
-      enable = true;
-      enableSSHSupport = true;
-      enableBrowserSocket = false;
-    };
-  };
 
   # Fish shell
   programs.fish.enable = true;
@@ -357,6 +348,9 @@
   # Steam Package overrides
   nixpkgs.config.packageOverrides = pkgs: {
     steam = pkgs.steam.override {
+      # NOTE Uhmmmmmm DO I want this??? :-)
+      # NOTE I am using RADV, RADV is nice happy nice - good performance, from MESA, its `rad` :-)
+      # I assume it is using RADV anyways
       extraProfile = ''unset VK_ICD_FILENAMES'';
       extraPkgs =
         pkgs: with pkgs; [
@@ -474,48 +468,17 @@
       libxkbcommon
     ]);
 
-  # ===================================
-  # Extra System Packages
-  # ===================================
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    # Unofficial Amazon Games Launcher
-    # nile
-
-    # Epic Games/ GOG / Amazon Games Launcher Linux Alternative
-    heroic
-
-    # Additional tools for game launching tweaks
-    gamescope
-    mangohud
-
-    # Lutris
-    (lutris.override {
-      extraLibraries = pkgs: [
-        # List library dependencies here
-      ];
-
-      extraPkgs = pkgs: [
-        # List package dependencies here
-      ];
-    })
-
-    # Eye Of Gnome Additional Packages
-    gthumb
-  ];
-
-  # ===================================
   # User/Users Config
   # ===================================
 
+  # root user can trust ssh-ers, for keys here
   users.users.root = {
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILKAU5lq//NVCZ7pNvCmDppdWuqqN7ctFFm3a6PasNzt guibaeta"
     ];
   };
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  #
+  # the user account
   users.users.guibaeta = {
     isNormalUser = true;
     description = "Guilherme Fontes";
@@ -532,10 +495,7 @@
     ];
 
     packages = with pkgs; [
-      # Management Tools
-      git
-
-      # Browsers
+      # firefox browser, wrapped with an argument.. I don't remember why....
       (pkgs.symlinkJoin {
         name = "firefox-overlay";
         paths = [ pkgs.firefox ];
@@ -544,71 +504,59 @@
           wrapProgram $out/bin/firefox --set GTK_IM_MODULE xim
         '';
       })
+      #
+      # chrome browser, for when websites don't like firefox
       google-chrome
-
-      # Note Taking
+      #
+      # markdown note taking - similar to Notion
       obsidian
-
-      # Multi-purpose Calculator App
+      #
+      # feature-rich calculator - swiss army knife of a calculator
       qalculate-gtk
-
+      #
+      # to stream things
       stremio
-
-      # BitTorrent client
+      #
+      # client for torrents
       fragments
-
-      # Music/Songs recognition
+      #
+      # music recogniser - Similar to Shazam
       mousai
-
+      #
       # Keepass Client
       keepassxc
-
-      # IDEs
+      #
+      # ♥ Jetbrains IDEs ♥
+      #     ...will eventually just not have these.. I'm an Helix/vim boy now
       jetbrains.pycharm-professional
-      # jetbrains.clion
       jetbrains.idea-ultimate
-
-      # Socials
-      signal-desktop
-      discord
-
-      # Meeting Apps
+      #
+      # if need to zoooooooooom
       zoom-us
-
-      # Game Launchers
-      cartridges
-      prismlauncher # Minecraft Launcher
-
-      # Office
-      # freeoffice
-      # hunspell
-      # hunspellDicts.uk_UA
-      # hunspellDicts.th_TH
-      # onlyoffice-bin
-
-      # helpful tools
+      #
+      # prints a tldr of programs
       tldr
-      eyedropper # Gtk based color picker
-
+      #
+      # color picker
+      eyedropper
+      #
       # photo editing
       darktable
-
-      # E-Reader
+      #
+      # (e-)reader app
       foliate
-
-      # Markdown editor
+      #
+      # useful to preview markdown
       apostrophe
-
-      # Pomodoro App
+      #
+      # pomodoro app
       gnome-solanum
-
-      # Audio Simple Wiring Tool
+      #
+      # easily wire audio ins and outs, visually
       helvum
-
+      #
+      # notes that stick
       sticky-notes
-
-      # Virtual Desktop Infrastructure Client
-      # vmware-horizon-client
     ];
   };
 
