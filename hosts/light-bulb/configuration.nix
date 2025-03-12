@@ -219,6 +219,9 @@
       rocmPackages.clr
       # Enable Video Accelaration API
       libva
+      libvdpau
+      vaapiVdpau
+      libvdpau-va-gl
 
       # Graphics with AMD open-source drivers
       # amdvlk
@@ -389,6 +392,29 @@
       xorg.libxshmfence
       xorg.libXxf86vm
       libelf
+      libuv
+      libuvc
+      libgudev
+      speex
+      libvdpau
+      gst_all_1.gstreamer
+      gst_all_1.gst-vaapi
+      gst_all_1.gst-libav
+      gst_all_1.gstreamermm
+      gst_all_1.gst-devtools
+      gst_all_1.icamerasrc-ipu6
+      gst_all_1.gst-rtsp-server
+      gst_all_1.gst-plugins-bad
+      gst_all_1.gst-plugins-ugly
+      gst_all_1.gst-plugins-good
+      gst_all_1.gst-plugins-base
+      gst_all_1.icamerasrc-ipu6ep
+      gst_all_1.gst-plugins-viperfx
+      gst_all_1.icamerasrc-ipu6epmtl
+      gst_all_1.gst-editing-services
+
+      libxcrypt
+      gamemode
 
       # Required
       glib
