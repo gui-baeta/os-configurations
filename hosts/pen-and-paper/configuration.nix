@@ -257,17 +257,6 @@
       # Meeting Apps
       zoom-us
 
-      # Game Launchers
-      #cartridges
-      #prismlauncher # Minecraft Launcher
-
-      # Office
-      # freeoffice
-      # hunspell
-      # hunspellDicts.uk_UA
-      # hunspellDicts.th_TH
-      # onlyoffice-bin
-
       # helpful tools
       tldr
       eyedropper # Gtk based color picker
@@ -291,9 +280,6 @@
       helvum
 
       sticky-notes
-
-      # Virtual Desktop Infrastructure Client
-      vmware-horizon-client
     ];
   };
 

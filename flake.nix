@@ -33,9 +33,6 @@
       nixosConfigurations.pen-and-paper = nixpkgs.lib.nixosSystem rec {
         system = "x86_64-linux";
         modules = [
-          # Import the previous configuration.nix we used,
-          # so the old configuration file still takes effect
-          # TODO Put things from configuration.nix in modules when possible
           "${self}/modules/."
           "${self}/hosts/pen-and-paper/configuration.nix"
           "${self}/hosts/common.nix"
@@ -47,16 +44,11 @@
               useUserPackages = true;
               users.guibaeta = import "${self}/modules/home/.";
 
-              # Optionally, use home-manager.extraSpecialArgs to pass
-              # arguments to home.nix
               extraSpecialArgs = {
-                # This is a really ugly way to pass down nixpkgs-unstable to the home modules
-                # Needs refactor
-                # See:
+                # SEE:
                 #   - https://github.com/chris-martin/home/blob/eb12e3c02d25bb1b2b2624021bd8479996352a4c/os/flake.nix
                 #   - https://github.com/chris-martin/home/blob/dc79903c93f654108ea3c05cfd779bdef72eb584/os/home/modules/packages.nix
                 #   - https://www.reddit.com/r/NixOS/comments/12ewa4j/newbie_how_to_use_unstable_packages_in/
-                #   - Search more
                 #
                 # NOTE  SEE: https://github.com/Misterio77/nix-config/blob/main/flake.nix#L119C1-L126C9
                 # I can do a let before defining the outputs
