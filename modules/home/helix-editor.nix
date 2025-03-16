@@ -6,17 +6,16 @@
 {
 
   programs.helix.package = unstable-pkgs.helix;
+  programs.helix.extraPackages = with unstable-pkgs; [
+    simple-completion-language-server
+  ];
 
   home.packages =
     (with pkgs; [
       # generic
       efm-langserver
-      # generic
-      prettierd
       # yaml linting
       yaml-language-server
-      # html, json, css, eslint
-      vscode-langservers-extracted
       # toml
       taplo
       # nixfmt
@@ -25,12 +24,12 @@
       harper
       # terraform
       terraform-ls
-      # fast python linting
-      ruff
     ])
     ++
       # Packages from unstable-pkgs
       (with unstable-pkgs; [
+        # generic-ish lang server
+        nodePackages.prettier
         # bash
         bash-language-server
         # Dockerfile
@@ -40,13 +39,13 @@
         # markdown
         # - robust LS
         marksman
-        # - grammar and spelling
-        ltex-ls-plus
-
         # typst
         tinymist
         # Nix LS
         nil
+        # fast python linting
+        ruff
+        ruff-lsp
       ])
     ++
       # Python 3.12 Packages
@@ -54,6 +53,13 @@
         # Python linting, using pylsp and ruff in the back
         python-lsp-ruff
       ]);
+
+  home.file = {
+    "helix" = {
+      source = ./snippets.toml;
+      target = ".config/helix/external-snippets.toml";
+    };
+  };
 
   programs.helix = {
     enable = true;
@@ -144,15 +150,32 @@
         "<" = ">";
       };
       editor.smart-tab = {
-        enable = false;
+        enable = true;
       };
     };
     languages = {
+      #
+      # Languages
+      #
       language = [
         {
           name = "hcl";
           language-servers = [ "terraform-ls" ];
           language-id = "terraform";
+        }
+        {
+          name = "git-commit";
+          language-servers = [ "scls" ];
+        }
+        {
+          # introduce a new language to enable completion on any doc by forcing set language with :set-language stub
+          name = "whatever";
+          scope = "text.whatever";
+          file-types = [ ];
+          shebangs = [ ];
+          roots = [ ];
+          auto-format = false;
+          language-servers = [ "scls" ];
         }
         {
           name = "tfvars";
@@ -164,6 +187,7 @@
           language-servers = [
             "marksman"
             "ltex-ls"
+            "scls"
           ];
           # Remove trailing whitespaces. See: https://www.reddit.com/r/HelixEditor/comments/1c9lg73/highlight_trailing_whitespace_only/
           formatter = {
@@ -206,48 +230,63 @@
           formatter.command = "nixfmt";
         }
         {
-          name = "typescript";
-          language-servers = [
-            {
-              name = "efm";
-              only-features = [
-                "diagnostics"
-                "format"
-              ];
-            }
-            {
-              name = "typescript-language-server";
-              except-features = [ "format" ];
-            }
-          ];
+          name = "html";
+          formatter = {
+            command = "prettier";
+            args = [
+              "--parser"
+              "html"
+            ];
+          };
+          language-servers = [ "scls" ];
+        }
+        {
+          name = "json";
+          formatter = {
+            command = "prettier";
+            args = [
+              "--parser"
+              "json"
+            ];
+          };
+          language-servers = [ "scls" ];
+        }
+        {
+          name = "css";
+          formatter = {
+            command = "prettier";
+            args = [
+              "--parser"
+              "css"
+            ];
+          };
+          language-servers = [ "scls" ];
         }
       ];
+      #
+      # Language Servers
+      #
       language-server = {
+        scls = {
+          command = "simple-completion-language-server";
+          config = {
+            max_completion_items = 100; # set max completion results len for each group: words, snippets, unicode-input
+            feature_words = true; # enable completion by word
+            feature_snippets = true; # enable snippets
+            snippets_first = true; # completions will return before snippets by default
+            snippets_inline_by_word_tail = false; # suggest snippets by WORD tail, for example text `xsq|` become `x^2|` when snippet `sq` has body `^2`
+            feature_unicode_input = false; # enable "unicode input"
+            feature_paths = false; # enable path completion
+            feature_citations = false; # enable citation completion (only on `citation` feature enabled)
+            environment = {
+              RUST_LOG = "info,simple-completion-language-server=info";
+              LOG_FILE = "/tmp/completion.log";
+            };
+          };
+        };
         terraform-ls = {
           command = "terraform-ls";
           args = [ "serve" ];
-        };
-        vscode-json-language-server = {
-          config = {
-            provideFormatter = true;
-            json = {
-              keepLines = {
-                enable = true;
-              };
-            };
-          };
-        };
-        ltex-ls = {
-          config = {
-            ltex.disabledRules = {
-              en-US = [ "PROFANITY" ];
-              en-GB = [ "PROFANITY" ];
-            };
-            ltex.dictionary = {
-              en-US = [ "builtin" ];
-              en-GB = [ "builtin" ];
-            };
-          };
         };
         yaml-language-server = {
           config = {
@@ -261,6 +300,65 @@
               };
             };
           };
+        };
+        pylsp = {
+          config.pylsp.plugins = {
+            flake8 = {
+              enabled = false;
+            };
+            autopep8 = {
+              enabled = false;
+            };
+            mccabe = {
+              enabled = false;
+            };
+            pycodestyle = {
+              enabled = false;
+            };
+            pyflakes = {
+              enabled = false;
+            };
+            pylint = {
+              enabled = false;
+            };
+            yapf = {
+              enabled = false;
+            };
+            ruff = {
+              enabled = true;
+              select = [
+                "E"
+                "F"
+                "UP"
+                "B"
+                "SIM"
+                "I"
+                "PD"
+                "NPY"
+                "PERF"
+                "FURB"
+                "DOC"
+                "TRY"
+                "W"
+                "R"
+                "PL"
+                "TCH"
+                "Q"
+                "PT"
+                "ICN"
+                "C4"
+                "COM"
+                "FBT"
+                "S"
+                "N"
+              ];
+              ignore = [ "F401" ];
+              lineLength = 120;
+            };
+          };
+        };
+        ruff = {
+          command = "ruff-lsp";
         };
         harper-ls = {
           command = "harper-ls";
