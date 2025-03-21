@@ -46,6 +46,9 @@
       gnomeExtensions.caffeine
       gnomeExtensions.gsconnect
       #
+      # for integration with the solaar app - for Logitech devices
+      gnomeExtensions.solaar-extension
+
       # Some missing icons
       adwaita-icon-theme
       #

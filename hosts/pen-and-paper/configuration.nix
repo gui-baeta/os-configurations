@@ -16,25 +16,25 @@
 
   services.rpcbind.enable = true;
   services.nfs.server.enable = true;
-  systemd.mounts = [
-    {
-      type = "nfs";
-      mountConfig = {
-        Options = "noatime";
-      };
-      what = "LightBulb:/storage/Pictures";
-      where = "/mnt/NFS-Pictures";
-    }
-  ];
-  systemd.automounts = [
-    {
-      wantedBy = [ "multi-user.target" ];
-      automountConfig = {
-        TimeoutIdleSec = "600";
-      };
-      where = "/mnt/NFS-Pictures";
-    }
-  ];
+  # systemd.mounts = [
+  #   {
+  #     type = "nfs";
+  #     mountConfig = {
+  #       Options = "noatime";
+  #     };
+  #     what = "light-bulb:/storage/Pictures";
+  #     where = "/mnt/NFS-Pictures";
+  #   }
+  # ];
+  # systemd.automounts = [
+  #   {
+  #     wantedBy = [ "multi-user.target" ];
+  #     automountConfig = {
+  #       TimeoutIdleSec = "600";
+  #     };
+  #     where = "/mnt/NFS-Pictures";
+  #   }
+  # ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -177,8 +177,12 @@
 
   programs.dconf.enable = true;
 
+  #
   # Logitech Devices (Mouse, etc)
   hardware.logitech.wireless.enable = true;
+  #
+  # this line enables solaar
+  hardware.logitech.wireless.enableGraphical = true;
 
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
