@@ -46,6 +46,7 @@
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
 
+      # NOTE: SHOULD BE ONLY IN DESKTOP
       # AMD ROCm and CUDA related
       # SEE: https://github.com/nixos-rocm/nixos-rocm
       extra-sandbox-paths = [

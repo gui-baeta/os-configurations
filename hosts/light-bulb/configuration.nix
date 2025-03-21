@@ -153,9 +153,12 @@
   # Enabled by default in desktopManager.gnome
   services.libinput.enable = true;
 
+  #
   # Logitech Devices (Mouse, etc)
   hardware.logitech.wireless.enable = true;
-
+  #
+  # this line enables solaar
+  hardware.logitech.wireless.enableGraphical = true;
   # ===================================
   # Localisation
   # ===================================
