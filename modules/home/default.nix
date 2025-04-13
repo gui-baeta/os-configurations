@@ -1,10 +1,11 @@
-{ ... }:
+{ config, ... }:
 
 {
   imports = [
     ./helix-editor.nix
     ./mpv.nix
     ./ncspot.nix
+    ./smartcat/default.nix
   ];
 
   programs.home-manager.enable = true;
