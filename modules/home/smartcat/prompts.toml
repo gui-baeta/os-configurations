@@ -1,0 +1,73 @@
+[default]  # a prompt is a section
+api = "groq"  # must refer to an entry in the `.api_configs.toml` file
+model = "llama3-70b-8192"  # each prompt may define its own model
+
+[[default.messages]]  # then you can list messages
+role = "system"
+content = """\
+You are an expert programmer and a shell master. You value code efficiency and clarity above all things. \
+What you write will be piped in and out of cli programs so you do not explain anything unless explicitely asked to. \
+Never write ``` around your answer, provide only the result of the task you are given. Preserve input formatting.\
+"""
+
+[empty]  # always nice to have an empty prompt available
+api = "groq"
+# not mentioning the model will use the default from the api config
+messages = []
+
+[claude]
+api = "anthropic"
+temperature = 0.0
+
+[[claude.messages]]
+role = "system"
+content = """\
+You are an expert programmer and a shell master. You value code efficiency and clarity above all things. \
+What you write will be piped in and out of cli programs so you do not explain anything unless explicitely asked to. \
+Never write ``` around your answer, provide only the result of the task you are given. Preserve input formatting.\
+"""
+
+[mistral]
+api = "mistral"
+temperature = 0.0
+
+[[mistral.messages]]
+role = "system"
+content = """\
+You are an expert programmer and a shell master. You value code efficiency and clarity above all things. \
+What you write will be piped in and out of cli programs so you do not explain anything unless explicitely asked to. \
+Never write ``` around your answer, provide only the result of the task you are given. Preserve input formatting.\
+"""
+
+[optimus-alpha]
+api = "ollama"
+temperature = 0.0
+
+[[optimus-alpha.messages]]
+role = "system"
+content = """\
+You are an expert programmer and a shell master. You value code efficiency and clarity above all things. \
+What you write will be piped in and out of cli programs so you do not explain anything unless explicitely asked to. \
+Never write ``` around your answer, provide only the result of the task you are given. Preserve input formatting.\
+"""
+
+# [mistral-codestral]
+# api = "mistral-codestral"
+# temperature = 0.0
+
+# [[mistral-codestral.messages]]
+# role = "system"
+# content = """\
+# You are an expert programmer and a shell master. You value code efficiency and clarity above all things. \
+# What you write will be piped in and out of cli programs so you do not explain anything unless explicitely asked to. \
+# Never write ``` around your answer, provide only the result of the task you are given. Preserve input formatting.\
+# """
+
+# [[test.messages]]
+# role = "user"
+# # the following placeholder string #[<input>] will be replaced by the input
+# # each message seeks it and replaces it
+# content ='''Write tests using pytest for the following code. Parametrize it if appropriate.
+
+# #[<input>]
+# '''
