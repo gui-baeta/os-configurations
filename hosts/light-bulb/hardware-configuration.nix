@@ -4,6 +4,7 @@
 {
   config,
   lib,
+  pkgs,
   modulesPath,
   ...
 }:
@@ -18,6 +19,7 @@
     "xhci_pci"
     "ahci"
     "usbhid"
+    "usb_storage"
     "sd_mod"
   ];
   boot.initrd.kernelModules = [ ];
@@ -43,6 +45,20 @@
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/C6E4-A7D7";
     fsType = "vfat";
+    options = [
+      "fmask=0022"
+      "dmask=0022"
+    ];
+  };
+
+  fileSystems."/storage" = {
+    device = "/dev/disk/by-uuid/8c0cdb39-bc09-417b-a662-7ae9d1220927";
+    fsType = "ext4";
+  };
+
+  fileSystems."/other2" = {
+    device = "/dev/disk/by-uuid/8ba714dd-3658-40d2-a229-1d06444c98e1";
+    fsType = "ext4";
   };
 
   swapDevices = [
@@ -54,7 +70,9 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
+  # networking.interfaces.docker0.useDHCP = lib.mkDefault true;
   # networking.interfaces.enp9s0.useDHCP = lib.mkDefault true;
+  # networking.interfaces.wlp7s0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
