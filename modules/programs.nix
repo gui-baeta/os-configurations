@@ -86,6 +86,12 @@
     # not-so-unstable pkgs go heeeeeeeeeeeere
     ++ (with unstable-pkgs; [
       #
+      # query LLM directly in the shell. is able to read from stdin and outputs to stdout
+      smartcat
+      #
+      # webapp frontend to interact with LLMs
+      open-webui
+      #
       # app to manage Logitech thingys
       solaar
 
