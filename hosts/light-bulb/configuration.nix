@@ -74,15 +74,6 @@
   # To not need to retype Disk encryption password for each disk
   boot.initrd.luks.reusePassphrases = true;
 
-  # Mount point for 1 TB HDD
-  fileSystems = {
-    # 1TB HDD
-    "/storage" = {
-      device = "/dev/disk/by-uuid/8c0cdb39-bc09-417b-a662-7ae9d1220927";
-      fsType = "ext4";
-    };
-  };
-
   # Some system level tweaks
   boot.kernel.sysctl = {
 
