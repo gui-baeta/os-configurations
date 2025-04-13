@@ -28,6 +28,8 @@
     ++
       # Packages from unstable-pkgs
       (with unstable-pkgs; [
+        # language server integrating LLMs
+        lsp-ai
         # generic-ish lang server
         nodePackages.prettier
         # bash
