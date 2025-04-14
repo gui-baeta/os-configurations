@@ -56,6 +56,10 @@
                   inherit system;
                   config.allowUnfree = true;
                 };
+                pkgs = import nixpkgs {
+                  inherit system;
+                  config.allowUnfree = true;
+                };
 
                 # FIXME Dont know how to use it in flake. Put in module
                 #   inherit inputs;
@@ -72,6 +76,10 @@
         specialArgs = {
           inherit inputs;
           unstable-pkgs = import nixpkgs-unstable {
+            inherit system;
+            config.allowUnfree = true;
+          };
+          pkgs = import nixpkgs {
             inherit system;
             config.allowUnfree = true;
           };
@@ -97,6 +105,10 @@
                   inherit system;
                   config.allowUnfree = true;
                 };
+                pkgs = import nixpkgs {
+                  inherit system;
+                  config.allowUnfree = true;
+                };
               };
             };
           }
@@ -107,7 +119,14 @@
 
         specialArgs = {
           inherit inputs;
-          unstable-pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux;
+          unstable-pkgs = import nixpkgs-unstable {
+            inherit system;
+            config.allowUnfree = true;
+          };
+          pkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
         };
       };
     };
