@@ -284,6 +284,9 @@
       helvum
 
       sticky-notes
+
+      # remote desktop client
+      vmware-horizon-client
     ];
   };
 
