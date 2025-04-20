@@ -553,6 +553,8 @@
       #
       # if need to zoooooooooom
       zoom-us
+      # to talk, with friends? I think I have friends
+      discord
       #
       # prints a tldr of programs
       tldr

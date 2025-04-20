@@ -1,0 +1,11 @@
+keys:
+  - &users:
+    - &guibaeta age1pulhf6g3p3sm09xffxajxm0qj6dnenalryrfuw74lmynxfdq5vhq8rtdgr
+  - &hosts:
+    - &light-bulb age16xezenx5lhn9j0d2j79nxk3lqg04ps22j2qxszmkjz9p58eqed6qrvgta3
+creation_rules:
+  - path_regex: secrets/secrets.yaml$
+    key_groups:
+      - age:
+        - *guibaeta
+        - *light-bulb
