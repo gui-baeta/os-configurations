@@ -14,6 +14,7 @@
     ./overrides.nix
     ./quirks.nix
     ./peripherals.nix
+    ./games/.
 
     # TODO Eventually, for created modules
     # ../modules
