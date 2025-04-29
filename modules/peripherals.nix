@@ -34,17 +34,17 @@
   #
   # udev rules for Steam Controller
   services.udev.extraRules = ''
-    # Valve USB devices
-    SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", MODE="0666"
-    # Steam Controller udev write access
-    KERNEL=="uinput", SUBSYSTEM=="misc", TAG+="uaccess"
+    # Valve generic(all) USB devices
+    SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", MODE="0660", TAG+="uaccess"
+
+    # Valve HID devices; Bluetooth; USB
+    KERNEL=="hidraw*", KERNELS=="*28DE:*", MODE="0660", TAG+="uaccess"
 
     # Valve HID devices over USB hidraw
-    KERNEL=="hidraw*", ATTRS{idVendor}=="28de", MODE="0666"
+    KERNEL=="hidraw*", ATTRS{idVendor}=="28de", MODE="0660", TAG+="uaccess"
 
-    # Valve HID devices over bluetooth hidraw
-    KERNEL=="hidraw*", KERNELS=="*28DE:*", MODE="0666"
-
+    # Steam Controller udev write access
+    KERNEL=="uinput", SUBSYSTEM=="misc", TAG+="uaccess"
 
     # NOTE: UNCOMMENT & TEST IF THIS IMPROVES ANYTHING
     #
