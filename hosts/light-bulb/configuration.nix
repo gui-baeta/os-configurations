@@ -319,47 +319,6 @@
   programs.kdeconnect.enable = true;
   programs.kdeconnect.package = pkgs.gnomeExtensions.gsconnect;
 
-  # ===================================
-  # Steam/Games related
-  # ===================================
-
-  # Java - For Steam
-  programs.java.enable = true;
-
-  # Steam
-  programs.steam = {
-    enable = true;
-    gamescopeSession.enable = true;
-
-    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-  };
-  programs.gamemode.enable = true;
-
-  # Steam Package overrides
-  nixpkgs.config.packageOverrides = pkgs: {
-    steam = pkgs.steam.override {
-      # NOTE Uhmmmmmm DO I want this??? :-)
-      # NOTE I am using RADV, RADV is nice happy nice - good performance, from MESA, its `rad` :-)
-      # I assume it is using RADV anyways
-      extraProfile = ''unset VK_ICD_FILENAMES'';
-      extraPkgs =
-        pkgs: with pkgs; [
-          xorg.libXcursor
-          xorg.libXi
-          xorg.libXinerama
-          xorg.libXScrnSaver
-          libpng
-          libpulseaudio
-          libvorbis
-          stdenv.cc.cc.lib
-          libkrb5
-          keyutils
-          dxvk
-        ];
-    };
-  };
-
   # Extra Packages for Linking
   programs.nix-ld.libraries =
     options.programs.nix-ld.libraries.default

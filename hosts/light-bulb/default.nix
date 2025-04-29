@@ -1,8 +1,5 @@
 {
-  pkgs,
-  unstable-pkgs,
   inputs,
-  config,
   ...
 }:
 
@@ -30,5 +27,4 @@
     #
     ./sops-configs.nix
   ];
-
 }

@@ -17,4 +17,40 @@
     batteryIcons = "regular"; # Which battery icons to use (*regular*, symbolic, solaar)
     extraArgs = ""; # Extra arguments to pass to solaar on startup
   };
+  #
+  # ================
+  # Steam Controller stuff
+  # ================
+  #
+  #
+  # support Steam Input better - translate input events from X11 to uinput events
+  programs.steam.extest.enable = true;
+  #
+  # enable udev rules and add uinput to boot.kernelModules
+  hardware.steam-hardware.enable = true;
+  #
+  # Enable uinput support
+  hardware.uinput.enable = true;
+  #
+  # udev rules for Steam Controller
+  services.udev.extraRules = ''
+    # Valve USB devices
+    SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", MODE="0666"
+    # Steam Controller udev write access
+    KERNEL=="uinput", SUBSYSTEM=="misc", TAG+="uaccess"
+
+    # Valve HID devices over USB hidraw
+    KERNEL=="hidraw*", ATTRS{idVendor}=="28de", MODE="0666"
+
+    # Valve HID devices over bluetooth hidraw
+    KERNEL=="hidraw*", KERNELS=="*28DE:*", MODE="0666"
+
+
+    # NOTE: UNCOMMENT & TEST IF THIS IMPROVES ANYTHING
+    #
+    # This rule is necessary for gamepad emulation; make sure each user requiring
+    # it is part of the input group.
+    # KERNEL=="uinput", MODE="0660", GROUP="input", OPTIONS+="static_node=uinput"
+  '';
+
 }
