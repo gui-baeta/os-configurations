@@ -56,7 +56,7 @@
         };
         modules = [
           "${self}/modules/."
-          "${self}/hosts/pen-and-paper/configuration.nix"
+          "${self}/hosts/pen-and-paper/."
           "${self}/hosts/common.nix"
           #
           # secrets management with sops

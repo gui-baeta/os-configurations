@@ -6,4 +6,6 @@
     "192.168.1.20" = [ "pen-and-paper" ];
     "192.168.1.99" = [ "lithium-sandwich" ];
   };
+
+  hardware.steam-hardware.enable = true;
 }
