@@ -13,6 +13,7 @@
     ./sound.nix
     ./overrides.nix
     ./quirks.nix
+    ./peripherals.nix
 
     # TODO Eventually, for created modules
     # ../modules
