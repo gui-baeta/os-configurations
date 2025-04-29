@@ -47,7 +47,6 @@
         nil
         # fast python linting
         ruff
-        ruff-lsp
       ])
     ++
       # Python 3.12 Packages
