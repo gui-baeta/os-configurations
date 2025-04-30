@@ -5,6 +5,7 @@
 }:
 
 {
+  environment.variables.EDITOR = "hx";
 
   programs.git = {
     enable = true;
