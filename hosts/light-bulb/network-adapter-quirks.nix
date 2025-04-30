@@ -1,6 +1,6 @@
 { pkgs, ... }:
 {
-  # Fix for Bluetooth in Intel AX200 Card to work, we need to reset it on user login
+  # Fix for Bluetooth to work w' Intel AX200 Card, we need to reset it on user login
   systemd.services.usbBluetoothResetCard = {
     enable = true;
 
@@ -12,5 +12,4 @@
       ExecStart = "${pkgs.usb-modeswitch}/bin/usb_modeswitch -R -v 8087 -p 0029";
     };
   };
-
 }
