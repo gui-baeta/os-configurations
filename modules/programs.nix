@@ -97,15 +97,8 @@
       # webapp frontend to interact with LLMs
       open-webui
       #
-      # app to manage Logitech thingys
-      solaar
-
       # handy Pen / Wacom Note Taking App
       rnote
-
-      #
-      # Darktable alternative
-      ansel
       #
       # vkdt - experimental Photo Editing tool - weird, cool, darktable like-ish.
       #        uses Vulkan directly, pretty fast

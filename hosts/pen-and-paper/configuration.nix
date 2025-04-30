@@ -4,6 +4,7 @@
 
 {
   pkgs,
+  unstable-pkgs,
   lib,
   options,
   ...
@@ -209,74 +210,76 @@
     shell = pkgs.fish;
     useDefaultShell = true;
 
-    packages = with pkgs; [
-      # Browsers
-      (pkgs.symlinkJoin {
-        name = "firefox-overlay";
-        paths = [ pkgs.firefox ];
-        buildInputs = [ pkgs.makeWrapper ];
-        postBuild = ''
-          wrapProgram $out/bin/firefox --set GTK_IM_MODULE xim
-        '';
-      })
-      google-chrome
+    packages =
+      (with pkgs; [
+        # Browsers
+        (pkgs.symlinkJoin {
+          name = "firefox-overlay";
+          paths = [ pkgs.firefox ];
+          buildInputs = [ pkgs.makeWrapper ];
+          postBuild = ''
+            wrapProgram $out/bin/firefox --set GTK_IM_MODULE xim
+          '';
+        })
+        google-chrome
 
-      # Note Taking
-      obsidian
+        # Note Taking
+        obsidian
 
-      # Multi-purpose Calculator App
-      qalculate-gtk
+        # Multi-purpose Calculator App
+        qalculate-gtk
 
-      stremio
+        stremio
 
-      # BitTorrent client
-      fragments
+        # BitTorrent client
+        fragments
 
-      # Music/Songs recognition
-      mousai
+        # Music/Songs recognition
+        mousai
 
-      # Keepass Client
-      keepassxc
+        # Keepass Client
+        keepassxc
 
-      # IDEs
-      jetbrains.pycharm-professional
-      # jetbrains.clion
-      jetbrains.idea-ultimate
+        # IDEs
+        jetbrains.pycharm-professional
+        # jetbrains.clion
+        jetbrains.idea-ultimate
 
-      # Socials
-      signal-desktop
-      discord
+        # Socials
+        signal-desktop
+        discord
 
-      # Meeting Apps
-      zoom-us
+        # Meeting Apps
+        zoom-us
 
-      # helpful tools
-      tldr
-      eyedropper # Gtk based color picker
+        # helpful tools
+        tldr
+        eyedropper # Gtk based color picker
 
-      # photo editing
-      darktable
+        # photo editing
+        darktable
 
-      # E-Reader
-      foliate
+        # E-Reader
+        foliate
 
-      # Markdown editor
-      apostrophe
+        # Markdown editor
+        apostrophe
 
-      # photo editing
-      darktable
+        # photo editing
+        darktable
 
-      # Pomodoro App
-      gnome-solanum
+        # Pomodoro App
+        gnome-solanum
 
-      # Audio Simple Wiring Tool
-      helvum
+        # Audio Simple Wiring Tool
+        helvum
 
-      sticky-notes
-
-      # remote desktop client
-      vmware-horizon-client
-    ];
+        sticky-notes
+      ])
+      ++ (with unstable-pkgs; [
+        # remote desktop client
+        vmware-horizon-client
+      ]);
   };
 
   # Some Firewall Rules
