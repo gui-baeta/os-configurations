@@ -32,8 +32,6 @@
       ssh-to-age
       # manage secrets thingdadoo tool - `secret operations`
       sops
-      # Unofficial Amazon Games Launcher
-      #nile
       #
       # to tweak gnome
       gnome-tweaks

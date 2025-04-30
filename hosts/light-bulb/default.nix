@@ -22,7 +22,7 @@
     ./host-specific-programs.nix
     #
     # Home VPN thingdadoo
-    ./home-vpn.nix
+    # ./home-vpn.nix
     #
     ./sops-configs.nix
   ];
