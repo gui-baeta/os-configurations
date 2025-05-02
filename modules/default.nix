@@ -7,7 +7,7 @@
 
 {
   imports = [
-    # Modules in common
+    ./oh-no-low-memory.nix
     ./programs.nix
     ./fonts.nix
     ./sound.nix
@@ -15,9 +15,6 @@
     ./quirks.nix
     ./peripherals.nix
     ./games/.
-
-    # TODO Eventually, for created modules
-    # ../modules
   ];
 
   # Necessary for opening links in gnome under certain conditions

@@ -15,4 +15,5 @@
     ./host-specific-programs.nix
   ];
 
+  services.fstrim.enable = true; # Enabled by default
 }
