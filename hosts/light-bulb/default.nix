@@ -26,4 +26,6 @@
     #
     ./sops-configs.nix
   ];
+
+  services.fstrim.enable = true; # Enabled by default
 }

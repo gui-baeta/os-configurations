@@ -31,21 +31,29 @@
     fsType = "ext4";
   };
 
-  boot.initrd.luks.devices."luks-ea55a6bf-9a9e-4e32-9a5d-a29a06003366".device =
-    "/dev/disk/by-uuid/ea55a6bf-9a9e-4e32-9a5d-a29a06003366";
+  boot.initrd.luks.devices."luks-ea55a6bf-9a9e-4e32-9a5d-a29a06003366" = {
+    device = "/dev/disk/by-uuid/ea55a6bf-9a9e-4e32-9a5d-a29a06003366";
+    allowDiscards = true;
+    bypassWorkqueues = true;
+  };
 
   fileSystems."/other" = {
     device = "/dev/disk/by-uuid/dc05bff2-5953-4065-b614-0d5fc7ca926b";
     fsType = "ext4";
+    options = [ "discard" ];
   };
 
-  boot.initrd.luks.devices."luks-50eaf8fa-3241-4179-b7a2-bf4af9473cee".device =
-    "/dev/disk/by-uuid/50eaf8fa-3241-4179-b7a2-bf4af9473cee";
+  boot.initrd.luks.devices."luks-50eaf8fa-3241-4179-b7a2-bf4af9473cee" = {
+    device = "/dev/disk/by-uuid/50eaf8fa-3241-4179-b7a2-bf4af9473cee";
+    allowDiscards = true;
+    bypassWorkqueues = true;
+  };
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/C6E4-A7D7";
     fsType = "vfat";
     options = [
+      "discard"
       "fmask=0022"
       "dmask=0022"
     ];
@@ -59,10 +67,14 @@
   fileSystems."/other2" = {
     device = "/dev/disk/by-uuid/8ba714dd-3658-40d2-a229-1d06444c98e1";
     fsType = "ext4";
+    options = [ "discard" ];
   };
 
   swapDevices = [
-    { device = "/dev/disk/by-uuid/f25bce8d-ac81-4329-bb4e-beb76884c86f"; }
+    {
+      device = "/dev/disk/by-uuid/f25bce8d-ac81-4329-bb4e-beb76884c86f";
+      options = [ "discard" ];
+    }
   ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
