@@ -165,5 +165,50 @@
           }
         ];
       };
+      nixosConfigurations.iso-image = nixpkgs.lib.nixosSystem rec {
+        system = "x86_64-linux";
+        modules = [
+          ./hosts/iso-image/.
+          ./hosts/common.nix
+          ./modules/overrides.nix
+          #
+          # logitech devices compat. app - solaar Flake
+          solaar.nixosModules.default
+          #
+          # secrets management with sops
+          sops-nix.nixosModules.sops
+          #
+          # updated nix-index-database
+          nix-index-database.nixosModules.nix-index
+          { programs.nix-index-database.comma.enable = true; }
+          #
+          # configs for home-manager
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.guibaeta = {
+                imports = [
+                  sops-nix.homeManagerModule
+                  ./hosts/iso-image/home.nix
+                ];
+              };
+
+              extraSpecialArgs = {
+                inherit inputs;
+                unstable-pkgs = import nixpkgs-unstable {
+                  inherit system;
+                  config.allowUnfree = true;
+                };
+                pkgs = import nixpkgs {
+                  inherit system;
+                  config.allowUnfree = true;
+                };
+              };
+            };
+          }
+        ];
+      };
     };
 }
