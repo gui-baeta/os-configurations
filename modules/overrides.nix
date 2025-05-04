@@ -48,11 +48,18 @@
       sources=[('xkb', 'pt')]
       xkb-options=['terminate:ctrl_alt_bksp']
 
+      [org.gnome.desktop.a11y]
+      always-show-universal-access-status=true
+
       [org.gnome.desktop.interface]
       gtk-enable-primary-paste=false
       show-battery-percentage=false
       text-scaling-factor=1.0
       show-battery-percentage=false
+
+      [org.gnome.mutter]
+      dynamic-workspaces=true
+      edge-tiling=true
 
       [org.gnome.shell]
       disabled-extensions=['apps-menu@gnome-shell-extensions.gcampax.github.com', 'auto-move-windows@gnome-shell-extensions.gcampax.github.com', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'native-window-placement@gnome-shell-extensions.gcampax.github.com', 'window-list@gnome-shell-extensions.gcampax.github.com', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com']
