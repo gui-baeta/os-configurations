@@ -6,6 +6,7 @@
   pkgs,
   unstable-pkgs,
   lib,
+  config,
   options,
   ...
 }:
@@ -34,9 +35,6 @@
   # ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
   boot.kernelPackages = pkgs.linuxPackages_latest;
   # boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_6_11.override {
   #   argsOverride = rec {
@@ -99,21 +97,33 @@
     "kvm-amd"
   ];
   boot.extraModulePackages = [ ];
-  boot.supportedFilesystems = [ "nfs" ]; # For NFS Client to work
+  boot.supportedFilesystems = [
+    "nfs" # For NFS Client to work
+    "btrfs"
+    "ext"
+    "vfat"
+  ];
+
+  boot.loader.grub.enable = false;
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   boot.initrd.availableKernelModules = [
-    "nfs"
+    "rtsx_pci_sdmmc"
+    "dm_thin_pool"
+    "dm-snapshot"
     "xhci_pci"
+    "sdhci_pci"
     "ahci"
     "nvme"
     "usb_storage"
     "usbhid"
     "sd_mod"
+    "sr_mod"
+    "nfs"
     "amdgpu"
   ];
 
-  boot.initrd.luks.devices."luks-fe128010-0577-4daa-8a2e-1b43503da280".device =
-    "/dev/disk/by-uuid/fe128010-0577-4daa-8a2e-1b43503da280";
   networking.hostName = "pen-and-paper"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -199,6 +209,8 @@
   services.libinput.enable = true;
   services.libinput.touchpad.tapping = true;
 
+  sops.secrets.user_password = { };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.guibaeta = {
     uid = 1000;
@@ -210,6 +222,7 @@
     ];
     shell = pkgs.fish;
     useDefaultShell = true;
+    hashedPasswordFile = config.sops.secrets.user_password.path;
 
     packages =
       (with pkgs; [

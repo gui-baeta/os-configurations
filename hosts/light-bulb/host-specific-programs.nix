@@ -38,6 +38,7 @@
     #
     # not-so-unstable pkgs go heeeeeeeeeeeere
     ++ (with unstable-pkgs; [
+      nixos-anywhere
       #
       # another game launcher - (my understanding) purpose is to try to compile fixes and tweaks for games
       umu-launcher

@@ -447,7 +447,7 @@
   # root user can trust ssh-ers, for keys here
   users.users.root = {
     openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILKAU5lq//NVCZ7pNvCmDppdWuqqN7ctFFm3a6PasNzt guibaeta"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGZ6YUBLwRNsonnP4QcsHsIaX2bRdYmd4gOM16esA5uX guilherme.baeta.campos@gmail.com"
     ];
   };
   #
@@ -465,7 +465,7 @@
     useDefaultShell = true;
 
     openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILKAU5lq//NVCZ7pNvCmDppdWuqqN7ctFFm3a6PasNzt guibaeta"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGZ6YUBLwRNsonnP4QcsHsIaX2bRdYmd4gOM16esA5uX guilherme.baeta.campos@gmail.com"
     ];
 
     packages = with pkgs; [

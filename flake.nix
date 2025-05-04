@@ -17,6 +17,10 @@
     # Generic good-to-have configurations for various hardware
     # configurations for quirky hardware and linux behavior
     # nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -36,6 +40,7 @@
       nix-index-database,
       sops-nix,
       solaar,
+      disko,
       ...
     }@inputs:
     {
@@ -53,14 +58,17 @@
           };
         };
         modules = [
-          "${self}/modules/."
-          "${self}/hosts/pen-and-paper/."
-          "${self}/hosts/common.nix"
+          ./modules/.
+          ./hosts/pen-and-paper/.
+          ./hosts/common.nix
           #
-          # logitech devices compat. app - solaar Flake
+          # logitech devices comptblty app - solaar Flake
           solaar.nixosModules.default
           #
-          # secrets management with sops
+          # to manage disk partitioning with nix
+          disko.nixosModules.disko
+          #
+          # manage secrets with sops through nix
           sops-nix.nixosModules.sops
           #
           # updated nix-index-database
@@ -76,7 +84,7 @@
               users.guibaeta = {
                 imports = [
                   sops-nix.homeManagerModule
-                  "${self}/modules/home/home.nix"
+                  ./modules/home/home.nix
                 ];
               };
 
@@ -123,9 +131,9 @@
           };
         };
         modules = [
-          "${self}/modules/."
-          "${self}/hosts/light-bulb/."
-          "${self}/hosts/common.nix"
+          ./modules/.
+          ./hosts/light-bulb/.
+          ./hosts/common.nix
           #
           # logitech devices compat. app - solaar Flake
           solaar.nixosModules.default
@@ -165,6 +173,9 @@
           }
         ];
       };
+      #
+      # Custom live NixOS image
+      # network hostname is `iso-image` and it allows ssh-ing from light-bulb
       nixosConfigurations.iso-image = nixpkgs.lib.nixosSystem rec {
         system = "x86_64-linux";
         modules = [
@@ -181,34 +192,11 @@
           # updated nix-index-database
           nix-index-database.nixosModules.nix-index
           { programs.nix-index-database.comma.enable = true; }
-          #
-          # configs for home-manager
-          home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users.guibaeta = {
-                imports = [
-                  sops-nix.homeManagerModule
-                  ./hosts/iso-image/home.nix
-                ];
-              };
-
-              extraSpecialArgs = {
-                inherit inputs;
-                unstable-pkgs = import nixpkgs-unstable {
-                  inherit system;
-                  config.allowUnfree = true;
-                };
-                pkgs = import nixpkgs {
-                  inherit system;
-                  config.allowUnfree = true;
-                };
-              };
-            };
-          }
         ];
       };
+      #
+      # : To build custom live NixOS image
+      # $ nix build .#iso-image
+      packages."x86_64-linux".iso-image = self.nixosConfigurations.iso-image.config.system.build.isoImage;
     };
 }

@@ -33,7 +33,29 @@
   };
 
   nix = {
+    sshServe = {
+      # Enable writing to the Nix store as a remote store via SSH.
+      #  allows for remote building of derivations.
+      #
+      # By default, the sshServe user is named `nix-ssh` and is not a trusted-user
+      enable = true;
+      write = true;
+    };
     settings = {
+      #
+      # users allowed to connect to the Nix daemon
+      #  Default is "*"
+      allowed-users = [ "*" ];
+      #
+      # users that have additional rights when connecting to the Nix daemon
+      #  Default is "root"
+      trusted-users = [
+        "nix-ssh" # for *sshServe*. see above
+        "@wheel"
+        "root"
+        "guibaeta"
+      ];
+
       auto-optimise-store = true;
       experimental-features = [
         "nix-command"
@@ -41,16 +63,7 @@
       ];
 
       substituters = [ "https://nix-community.cachix.org" ];
-      extra-substituters = [
-        # Populated by the CI in ggml-org/llama.cpp
-        "https://llama-cpp.cachix.org"
-
-        # A development cache for nixpkgs imported with `config.cudaSupport = true`.
-        # Populated by https://hercules-ci.com/github/SomeoneSerge/nixpkgs-cuda-ci.
-        # This lets one skip building e.g. the CUDA-enabled openmpi.
-        # TODO: Replace once nix-community obtains an official one.
-        "https://cuda-maintainers.cachix.org"
-      ];
+      extra-substituters = [ ];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];

@@ -24,7 +24,6 @@
     # Home VPN thingdadoo
     # ./home-vpn.nix
     #
-    ./sops-configs.nix
   ];
 
   services.fstrim.enable = true; # Enabled by default
