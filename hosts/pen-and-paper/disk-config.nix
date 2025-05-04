@@ -24,13 +24,10 @@
               ];
             };
           };
-          encryptedSwap = {
-            label = "crypt-swap";
-            priority = 10; # 2nd
-            size = "20G";
+          swap = {
+            size = "24G";
             content = {
               type = "swap";
-              randomEncryption = true;
               # - "once", whole swap space is discarded at swapon invocation.
               # - "pages", asynchronous discard on freed pages,
               # - "both", both policies are activated.
@@ -44,7 +41,6 @@
             content = {
               type = "luks";
               name = "crypted";
-              passwordFile = "/tmp/secret.key"; # NOTE: Must add this to the live ISO so that I don't have to manually create the file in the target machine
               settings = {
                 allowDiscards = true;
                 bypassWorkqueues = true;
