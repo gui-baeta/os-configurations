@@ -131,8 +131,81 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
+  sops.secrets."wireless.env" = {};
   # Enable networking
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    ensureProfiles = {
+      environmentFiles = [ config.sops.secrets."wireless.env".path ];
+      profiles = {
+        mobile-ap = {
+          connection = {
+            id = "mobile-ap";
+            type = "wifi";
+          };
+          ipv4 = {
+            method = "auto";
+          };
+          ipv6 = {
+            addr-gen-mode = "default";
+            method = "disabled";
+          };
+          proxy = { };
+          wifi = {
+            ssid = "$MOBILE_AP_WIFI_SSID";
+          };
+          wifi-security = {
+            key-mgmt = "wpa-psk";
+            psk = "$MOBILE_AP_WIFI_PASSWORD";
+          };
+        };
+        home-wifi-5ghz = {
+          proxy = { };
+          ipv4 = {
+            dns = "1.1.1.1;1.0.0.1;";
+            ignore-auto-dns = "true";
+            method = "auto";
+          };
+          ipv6 = {
+            addr-gen-mode = "default";
+            method = "disabled";
+          };
+          connection = {
+            id = "home-wifi";
+            type = "wifi";
+          };
+          wifi.ssid = "$HOME_WIFI_5GHZ_SSID";
+          wifi-security = {
+            auth-alg = "open"; # NOTE: Needed ?
+            key-mgmt = "wpa-psk";
+            psk = "$HOME_WIFI_5GHZ_PASSWORD";
+          };
+        };
+        home-wifi = {
+          proxy = { };
+          ipv4 = {
+            dns = "1.1.1.1;1.0.0.1;";
+            ignore-auto-dns = "true";
+            method = "auto";
+          };
+          ipv6 = {
+            addr-gen-mode = "default";
+            method = "disabled";
+          };
+          connection = {
+            id = "home-wifi";
+            type = "wifi";
+          };
+          wifi.ssid = "$HOME_WIFI_SSID";
+          wifi-security = {
+            auth-alg = "open"; # NOTE: Needed ?
+            key-mgmt = "wpa-psk";
+            psk = "$HOME_WIFI_PASSWORD";
+          };
+        };
+      };
+    };
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/Lisbon";
