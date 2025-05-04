@@ -283,6 +283,7 @@
   services.libinput.touchpad.tapping = true;
 
   sops.secrets.user_password = { };
+  sops.secrets.user_password.neededForUsers = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.guibaeta = {
