@@ -254,11 +254,6 @@
         # Keepass Client
         keepassxc
 
-        # IDEs
-        jetbrains.pycharm-professional
-        # jetbrains.clion
-        jetbrains.idea-ultimate
-
         # Socials
         signal-desktop
         discord
