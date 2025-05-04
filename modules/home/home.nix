@@ -7,6 +7,7 @@
     ./ncspot.nix
     ./smartcat/default.nix
     ./firefox.nix
+    ./git.nix
   ];
 
   programs.home-manager.enable = true;

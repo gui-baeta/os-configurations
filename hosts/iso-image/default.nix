@@ -165,6 +165,7 @@
   services.openssh.enable = true;
   users.users.nixos.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGZ6YUBLwRNsonnP4QcsHsIaX2bRdYmd4gOM16esA5uX guilherme.baeta.campos@gmail.com"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPOsqnGiiVWmJz2fy2gHny8umrzDvaRu1vmB0auoZjEd phineas.guifontes@gmail.com"
   ];
 
   isoImage.squashfsCompression = "gzip -Xcompression-level 1";
