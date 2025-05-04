@@ -54,7 +54,6 @@
                 extraArgs = [ "-f" ];
                 subvolumes = {
                   "@" = {
-                    extraArgs = [ "-Lcrypt-root" ];
                     mountpoint = "/";
                     mountOptions = [
                       "subvol=@"
@@ -65,7 +64,6 @@
                     ];
                   };
                   "@nix" = {
-                    extraArgs = [ "-Lcrypt-nix" ];
                     mountpoint = "/nix";
                     mountOptions = [
                       "subvol=@nix"
