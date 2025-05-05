@@ -124,14 +124,14 @@
     "amdgpu"
   ];
 
-  networking.hostName = "pen-and-paper"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.hostName = "pen-and-paper"; # define your hostname.
+  networking.networkmanager.wifi.backend = "iwd"; # wifi backend - Defaults to wpa_supplicant
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  sops.secrets."wireless.env" = {};
+  sops.secrets."wireless.env" = { };
   # Enable networking
   networking.networkmanager = {
     enable = true;
@@ -160,18 +160,8 @@
           };
         };
         home-wifi-5ghz = {
-          proxy = { };
-          ipv4 = {
-            dns = "1.1.1.1;1.0.0.1;";
-            ignore-auto-dns = "true";
-            method = "auto";
-          };
-          ipv6 = {
-            addr-gen-mode = "default";
-            method = "disabled";
-          };
           connection = {
-            id = "home-wifi";
+            id = "home-wifi-5ghz";
             type = "wifi";
           };
           wifi.ssid = "$HOME_WIFI_5GHZ_SSID";
@@ -180,8 +170,6 @@
             key-mgmt = "wpa-psk";
             psk = "$HOME_WIFI_5GHZ_PASSWORD";
           };
-        };
-        home-wifi = {
           proxy = { };
           ipv4 = {
             dns = "1.1.1.1;1.0.0.1;";
@@ -192,6 +180,8 @@
             addr-gen-mode = "default";
             method = "disabled";
           };
+        };
+        home-wifi = {
           connection = {
             id = "home-wifi";
             type = "wifi";
@@ -201,6 +191,16 @@
             auth-alg = "open"; # NOTE: Needed ?
             key-mgmt = "wpa-psk";
             psk = "$HOME_WIFI_PASSWORD";
+          };
+          proxy = { };
+          ipv4 = {
+            dns = "1.1.1.1;1.0.0.1;";
+            ignore-auto-dns = "true";
+            method = "auto";
+          };
+          ipv6 = {
+            addr-gen-mode = "default";
+            method = "disabled";
           };
         };
       };
