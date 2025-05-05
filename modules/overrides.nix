@@ -33,9 +33,18 @@
   services.gnome.evolution-data-server.enable = lib.mkForce false;
   services.gnome.gnome-initial-setup.enable = false;
 
+  services.geoclue2.enable = true; # for night-light to get location
+
   # See this for further reading and improvements: https://hoverbear.org/blog/declarative-gnome-configuration-in-nixos/
   services.xserver.desktopManager.gnome = {
     extraGSettingsOverrides = ''
+      [org.gnome.desktop.privacy]
+      disable-camera=false
+
+      [org.gnome.system.location]
+      enabled=true
+      max-accuracy-level='city'
+
       # Change default screensaver settings
       [org.gnome.desktop.screensaver]
       lock-enabled=true
@@ -44,22 +53,36 @@
       audible-bell=false
       resize-with-right-button=true
 
+      [org.gnome.desktop.sound]
+      event-sounds=false
+
       [org.gnome.desktop.input-sources]
       sources=[('xkb', 'pt')]
       xkb-options=['terminate:ctrl_alt_bksp']
+
+      [org.gnome.desktop.datetime]
+      automatic-timezone=true
 
       [org.gnome.desktop.a11y]
       always-show-universal-access-status=true
 
       [org.gnome.desktop.interface]
+      clock-format='24h'
+      clock-show-weekday=false
+      clock-show-date=true
+      clock-show-seconds=false
       gtk-enable-primary-paste=false
       show-battery-percentage=false
       text-scaling-factor=1.0
       show-battery-percentage=false
 
+      [org.gnome.desktop.calendar]
+      show-weekdate=false
+
       [org.gnome.mutter]
       dynamic-workspaces=true
       edge-tiling=true
+      center-new-windows=true
 
       [org.gnome.shell]
       disabled-extensions=['apps-menu@gnome-shell-extensions.gcampax.github.com', 'auto-move-windows@gnome-shell-extensions.gcampax.github.com', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'native-window-placement@gnome-shell-extensions.gcampax.github.com', 'window-list@gnome-shell-extensions.gcampax.github.com', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com']
@@ -69,7 +92,7 @@
       remember-mount-password=false
 
       [org.gnome.shell.weather]
-      automatic-location=true
+      automatic-location=false
       locations=[<(uint32 2, <('Lisbon', 'LPPT', true, [(0.6766059791742326, -0.15940673253105125)], [(0.67573331454823549, -0.15940673253105125)])>)>]
 
       [org.gnome.shell.window-switcher]
