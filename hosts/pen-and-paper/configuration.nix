@@ -301,14 +301,7 @@
     packages =
       (with pkgs; [
         # Browsers
-        (pkgs.symlinkJoin {
-          name = "firefox-overlay";
-          paths = [ pkgs.firefox ];
-          buildInputs = [ pkgs.makeWrapper ];
-          postBuild = ''
-            wrapProgram $out/bin/firefox --set GTK_IM_MODULE xim
-          '';
-        })
+        firefox
         google-chrome
 
         # Note Taking
