@@ -29,9 +29,6 @@
       url = "https://flakehub.com/f/Svenum/Solaar-Flake/*.tar.gz"; # For latest stable version
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    #
-    # NOTE: added from the future
-    # No tests were done
     my-secrets = {
       url = "git+ssh://git@github.com/gui-baeta/os-configurations-secrets?ref=main";
       flake = false;

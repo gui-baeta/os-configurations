@@ -1,4 +1,9 @@
-{ sops-nix, config, ... }:
+{
+  inputs,
+  sops-nix,
+  config,
+  ...
+}:
 
 {
   imports = [
@@ -18,7 +23,7 @@
   home.homeDirectory = "/home/guibaeta";
 
   sops = {
-    defaultSopsFile = ../../secrets/secrets.yaml;
+    defaultSopsFile = "${inputs.my-secrets}/secrets.yaml";
     defaultSopsFormat = "yaml";
     age.keyFile = "/home/${config.home.username}/.config/sops/age/keys.txt";
     defaultSymlinkPath = "/run/user/1000/secrets";
