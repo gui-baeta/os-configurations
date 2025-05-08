@@ -110,6 +110,7 @@
           "collapse_selection"
           ":w"
         ];
+        "G" = [ "goto_file_end" ];
         # "Alt-u" = [ ];
         # NOTE Should try to also customise the Shift-y and Shitf-p ones
         # "y" = "yank_main_selection_to_clipboard";
