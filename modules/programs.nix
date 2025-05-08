@@ -26,6 +26,11 @@
   #  NOTE To search for packages, we can run: `$ nix search wget`
   environment.systemPackages =
     (with pkgs; [
+      # encryption tool
+      age
+      ssh-to-age
+      # manage secrets thingdadoo tool - `secret operations`
+      sops
       # Unofficial Amazon Games Launcher
       #nile
       #

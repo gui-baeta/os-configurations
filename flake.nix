@@ -5,7 +5,6 @@
     # NixOS official package source
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-
     home-manager = {
       url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -14,10 +13,21 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
+    #
     # Generic, good-to-have-and-know, configurations for various hardware
     # Configurations for quirky hardware and linux behavior
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    #
+    # NOTE: added from the future
+    # No tests were done
+    my-secrets = {
+      url = "git+ssh://git@github.com/gui-baeta/os-configurations-secrets?ref=main";
+      flake = false;
+    };
   };
 
   outputs =
@@ -27,16 +37,36 @@
       nixpkgs-unstable,
       home-manager,
       nix-index-database,
+      sops-nix,
       ...
     }@inputs:
     {
       nixosConfigurations.pen-and-paper = nixpkgs.lib.nixosSystem rec {
         system = "x86_64-linux";
+        specialArgs = {
+          inherit inputs;
+          unstable-pkgs = import nixpkgs-unstable {
+            inherit system;
+            config.allowUnfree = true;
+          };
+          pkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
+        };
         modules = [
           "${self}/modules/."
           "${self}/hosts/pen-and-paper/configuration.nix"
           "${self}/hosts/common.nix"
-
+          #
+          # secrets management with sops
+          sops-nix.nixosModules.sops
+          #
+          # updated nix-index-database
+          nix-index-database.nixosModules.nix-index
+          { programs.nix-index-database.comma.enable = true; }
+          #
+          # configs for home-manager
           home-manager.nixosModules.home-manager
           {
             home-manager = {
@@ -69,10 +99,11 @@
             };
           }
 
-          nix-index-database.nixosModules.nix-index
-          { programs.nix-index-database.comma.enable = true; }
         ];
+      };
 
+      nixosConfigurations.light-bulb = nixpkgs.lib.nixosSystem rec {
+        system = "x86_64-linux";
         specialArgs = {
           inherit inputs;
           unstable-pkgs = import nixpkgs-unstable {
@@ -84,15 +115,20 @@
             config.allowUnfree = true;
           };
         };
-      };
-
-      nixosConfigurations.light-bulb = nixpkgs.lib.nixosSystem rec {
-        system = "x86_64-linux";
         modules = [
           "${self}/modules/."
           "${self}/hosts/light-bulb/."
           "${self}/hosts/common.nix"
 
+          #
+          # secrets management with sops
+          sops-nix.nixosModules.sops
+          #
+          # updated nix-index-database
+          nix-index-database.nixosModules.nix-index
+          { programs.nix-index-database.comma.enable = true; }
+          #
+          # configs for home-manager
           home-manager.nixosModules.home-manager
           {
             home-manager = {
@@ -112,22 +148,7 @@
               };
             };
           }
-
-          nix-index-database.nixosModules.nix-index
-          { programs.nix-index-database.comma.enable = true; }
         ];
-
-        specialArgs = {
-          inherit inputs;
-          unstable-pkgs = import nixpkgs-unstable {
-            inherit system;
-            config.allowUnfree = true;
-          };
-          pkgs = import nixpkgs {
-            inherit system;
-            config.allowUnfree = true;
-          };
-        };
       };
     };
 }

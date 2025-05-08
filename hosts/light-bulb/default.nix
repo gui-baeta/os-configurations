@@ -1,9 +1,14 @@
 {
+  pkgs,
+  unstable-pkgs,
+  inputs,
+  config,
   ...
 }:
 
 {
   imports = [
+    inputs.sops-nix.nixosModules.sops
     #
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -19,6 +24,11 @@
     #
     # System Packages that don't make sense to have in all hosts
     ./host-specific-programs.nix
+    #
+    # Home VPN thingdadoo
+    ./home-vpn.nix
+    #
+    ./sops-configs.nix
   ];
 
 }
