@@ -14,11 +14,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     #
-    # Generic, good-to-have-and-know, configurations for various hardware
-    # Configurations for quirky hardware and linux behavior
+    # Generic good-to-have configurations for various hardware
+    # configurations for quirky hardware and linux behavior
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     sops-nix = {
       url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    solaar = {
+      url = "https://flakehub.com/f/Svenum/Solaar-Flake/*.tar.gz"; # For latest stable version
       inputs.nixpkgs.follows = "nixpkgs";
     };
     #
@@ -38,6 +42,7 @@
       home-manager,
       nix-index-database,
       sops-nix,
+      solaar,
       ...
     }@inputs:
     {
@@ -58,6 +63,9 @@
           "${self}/modules/."
           "${self}/hosts/pen-and-paper/."
           "${self}/hosts/common.nix"
+          #
+          # logitech devices compat. app - solaar Flake
+          solaar.nixosModules.default
           #
           # secrets management with sops
           sops-nix.nixosModules.sops
@@ -119,7 +127,9 @@
           "${self}/modules/."
           "${self}/hosts/light-bulb/."
           "${self}/hosts/common.nix"
-
+          #
+          # logitech devices compat. app - solaar Flake
+          solaar.nixosModules.default
           #
           # secrets management with sops
           sops-nix.nixosModules.sops
