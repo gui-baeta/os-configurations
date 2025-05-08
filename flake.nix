@@ -80,9 +80,15 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              users.guibaeta = import "${self}/modules/home/.";
+              users.guibaeta = {
+                imports = [
+                  sops-nix.homeManagerModule
+                  "${self}/modules/home/home.nix"
+                ];
+              };
 
               extraSpecialArgs = {
+                inherit inputs;
                 # SEE:
                 #   - https://github.com/chris-martin/home/blob/eb12e3c02d25bb1b2b2624021bd8479996352a4c/os/flake.nix
                 #   - https://github.com/chris-martin/home/blob/dc79903c93f654108ea3c05cfd779bdef72eb584/os/home/modules/packages.nix
@@ -144,9 +150,15 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              users.guibaeta = import "${self}/modules/home/.";
+              users.guibaeta = {
+                imports = [
+                  sops-nix.homeManagerModule
+                  "${self}/modules/home/home.nix"
+                ];
+              };
 
               extraSpecialArgs = {
+                inherit inputs;
                 unstable-pkgs = import nixpkgs-unstable {
                   inherit system;
                   config.allowUnfree = true;

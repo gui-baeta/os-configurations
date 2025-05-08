@@ -5,7 +5,6 @@
 
 {
   imports = [
-    inputs.sops-nix.nixosModules.sops
     #
     # Include the results of the hardware scan.
     ./hardware-configuration.nix

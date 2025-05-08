@@ -453,6 +453,7 @@
   #
   # the user account
   users.users.guibaeta = {
+    uid = 1000;
     isNormalUser = true;
     description = "Guilherme Fontes";
     extraGroups = [
