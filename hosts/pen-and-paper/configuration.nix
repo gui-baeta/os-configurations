@@ -293,9 +293,6 @@
   services.libinput.enable = true;
   services.libinput.touchpad.tapping = true;
 
-  sops.secrets.user_password = { };
-  sops.secrets.user_password.neededForUsers = true;
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.guibaeta = {
     uid = 1000;
@@ -307,7 +304,6 @@
     ];
     shell = pkgs.fish;
     useDefaultShell = true;
-    hashedPasswordFile = config.sops.secrets.user_password.path;
 
     packages =
       (with pkgs; [
