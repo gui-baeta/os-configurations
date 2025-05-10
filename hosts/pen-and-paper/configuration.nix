@@ -132,80 +132,91 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   sops.secrets."wireless.env" = { };
-  # Enable networking
-  networking.networkmanager = {
-    enable = true;
-    ensureProfiles = {
-      environmentFiles = [ config.sops.secrets."wireless.env".path ];
-      profiles = {
-        mobile-ap = {
-          connection = {
-            id = "mobile-ap";
-            type = "wifi";
+  sops.secrets."wireguard/config/ams-nl" = { };
+
+  networking = {
+    networkmanager = {
+      enable = true;
+      ensureProfiles = {
+        environmentFiles = [ config.sops.secrets."wireless.env".path ];
+        profiles = {
+          mobile-ap = {
+            connection = {
+              id = "mobile-ap";
+              type = "wifi";
+            };
+            ipv4 = {
+              method = "auto";
+            };
+            ipv6 = {
+              addr-gen-mode = "default";
+              method = "disabled";
+            };
+            proxy = { };
+            wifi = {
+              ssid = "$MOBILE_AP_WIFI_SSID";
+            };
+            wifi-security = {
+              key-mgmt = "wpa-psk";
+              psk = "$MOBILE_AP_WIFI_PASSWORD";
+            };
           };
-          ipv4 = {
-            method = "auto";
+          home-wifi-5ghz = {
+            connection = {
+              id = "home-wifi-5ghz";
+              type = "wifi";
+            };
+            wifi.ssid = "$HOME_WIFI_5GHZ_SSID";
+            wifi-security = {
+              auth-alg = "open"; # NOTE: Needed ?
+              key-mgmt = "wpa-psk";
+              psk = "$HOME_WIFI_5GHZ_PASSWORD";
+            };
+            proxy = { };
+            ipv4 = {
+              dns = "1.1.1.1;1.0.0.1;";
+              ignore-auto-dns = "true";
+              method = "auto";
+            };
+            ipv6 = {
+              addr-gen-mode = "default";
+              method = "disabled";
+            };
           };
-          ipv6 = {
-            addr-gen-mode = "default";
-            method = "disabled";
-          };
-          proxy = { };
-          wifi = {
-            ssid = "$MOBILE_AP_WIFI_SSID";
-          };
-          wifi-security = {
-            key-mgmt = "wpa-psk";
-            psk = "$MOBILE_AP_WIFI_PASSWORD";
-          };
-        };
-        home-wifi-5ghz = {
-          connection = {
-            id = "home-wifi-5ghz";
-            type = "wifi";
-          };
-          wifi.ssid = "$HOME_WIFI_5GHZ_SSID";
-          wifi-security = {
-            auth-alg = "open"; # NOTE: Needed ?
-            key-mgmt = "wpa-psk";
-            psk = "$HOME_WIFI_5GHZ_PASSWORD";
-          };
-          proxy = { };
-          ipv4 = {
-            dns = "1.1.1.1;1.0.0.1;";
-            ignore-auto-dns = "true";
-            method = "auto";
-          };
-          ipv6 = {
-            addr-gen-mode = "default";
-            method = "disabled";
-          };
-        };
-        home-wifi = {
-          connection = {
-            id = "home-wifi";
-            type = "wifi";
-          };
-          wifi.ssid = "$HOME_WIFI_SSID";
-          wifi-security = {
-            auth-alg = "open"; # NOTE: Needed ?
-            key-mgmt = "wpa-psk";
-            psk = "$HOME_WIFI_PASSWORD";
-          };
-          proxy = { };
-          ipv4 = {
-            dns = "1.1.1.1;1.0.0.1;";
-            ignore-auto-dns = "true";
-            method = "auto";
-          };
-          ipv6 = {
-            addr-gen-mode = "default";
-            method = "disabled";
+          home-wifi = {
+            connection = {
+              id = "home-wifi";
+              type = "wifi";
+            };
+            wifi.ssid = "$HOME_WIFI_SSID";
+            wifi-security = {
+              auth-alg = "open"; # NOTE: Needed ?
+              key-mgmt = "wpa-psk";
+              psk = "$HOME_WIFI_PASSWORD";
+            };
+            proxy = { };
+            ipv4 = {
+              dns = "1.1.1.1;1.0.0.1;";
+              ignore-auto-dns = "true";
+              method = "auto";
+            };
+            ipv6 = {
+              addr-gen-mode = "default";
+              method = "disabled";
+            };
           };
         };
       };
     };
+    networkmanager.dns = "systemd-resolved";
+    wireguard.enable = true;
+    wg-quick = {
+      interfaces = {
+        wg0.configFile = config.sops.secrets."wireguard/config/ams-nl".path;
+      };
+    };
   };
+  services.resolved.enable = true;
 
   # Set your time zone.
   time.timeZone = "Europe/Lisbon";
