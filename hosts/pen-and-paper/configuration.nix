@@ -125,14 +125,14 @@
   ];
 
   networking.hostName = "pen-and-paper"; # define your hostname.
-  networking.networkmanager.wifi.backend = "iwd"; # wifi backend - Defaults to wpa_supplicant
+  # networking.networkmanager.wifi.backend = "iwd"; # wifi backend - Defaults to wpa_supplicant
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   sops.secrets."wireless.env" = { };
-  sops.secrets."wireguard/config/ams-nl" = { };
+  sops.secrets."wireguard/config/lis-pt" = { };
 
   networking = {
     networkmanager = {
@@ -212,7 +212,7 @@
     wireguard.enable = true;
     wg-quick = {
       interfaces = {
-        wg0.configFile = config.sops.secrets."wireguard/config/ams-nl".path;
+        wg-lis.configFile = config.sops.secrets."wireguard/config/lis-pt".path;
       };
     };
   };
