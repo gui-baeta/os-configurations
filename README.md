@@ -14,6 +14,13 @@ See:
  - [Misterio77/nix-config: firefox.nix](https://github.com/Misterio77/nix-config/blob/07ecc5286561910b9604014a26c24517bf583242/home/gabriel/features/desktop/common/firefox.nix#L7)
  - [Misterio77/home-manager: firefox.nix module](https://github.com/Misterio77/home-manager/blob/1c2c5e4cabba4c43504ef0f8cc3f3dfa284e2dbb/modules/programs/firefox.nix#L17)
 
+### Music, player and/or server
+- android: [https://www.symfonium.app/](https://www.symfonium.app/)
+- linux:
+ - server: [navidrome - https://www.navidrome.org/about/](https://www.navidrome.org/about/)
+ - searcher ;) : [slskd - https://github.com/slskd/slskd/](https://github.com/slskd/slskd/)
+ - terminal client: [stmp - https://github.com/wildeyedskies/stmp](https://github.com/wildeyedskies/stmp)
+
 ###### Cool, Interesting, Not A Priority
 - [ ] passwordstore (like bitwarden but local, and seems flexible): [passwordstore website](https://www.passwordstore.org/)
  - Frontend for passwordstore: Browser pass - [browserpass/browser-pass-extension](https://github.com/browserpass/browserpass-extension?tab=readme-ov-file#installation)
