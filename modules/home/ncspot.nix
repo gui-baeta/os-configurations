@@ -15,7 +15,8 @@
         "Shift+g" = "move bottom";
         "Shift+q" = "quit";
         "Shift+s" = "noop";
-        "q" = "quit";
+        "Esc" = "back";
+        "q" = "";
         "9" = "voldown 2";
         "0" = "volup 2";
       };
