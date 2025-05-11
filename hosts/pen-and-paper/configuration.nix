@@ -209,12 +209,6 @@
       };
     };
     networkmanager.dns = "systemd-resolved";
-    wireguard.enable = true;
-    wg-quick = {
-      interfaces = {
-        wg-lis.configFile = config.sops.secrets."wireguard/config/lis-pt".path;
-      };
-    };
   };
   services.resolved.enable = true;
 
