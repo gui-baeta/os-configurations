@@ -4,7 +4,7 @@ keys:
   - &hosts:
     - &light-bulb age16xezenx5lhn9j0d2j79nxk3lqg04ps22j2qxszmkjz9p58eqed6qrvgta3
 creation_rules:
-  - path_regex: secrets/secrets.yaml$
+  - path_regex: secrets.yaml$
     key_groups:
       - age:
         - *guibaeta
