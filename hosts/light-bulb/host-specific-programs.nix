@@ -34,6 +34,9 @@
       #
       # can generate thumbnails and cache them - also an image viewer
       gthumb
+
+      #
+      vmware-horizon-client
     ])
     #
     # not-so-unstable pkgs go heeeeeeeeeeeere
