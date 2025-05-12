@@ -1,29 +1,34 @@
--- gradual-pause.lua
--- This script implements a gradual fade-out when pausing and fade-in when unpausing in mpv.
--- It responds to ALL pause/unpause events regardless of trigger method.
--- Fixed version to handle MPV state restoration properly.
-
+-- gradual-pause.lua - Implements volume fade when pausing/unpausing in mpv
 local mp = require 'mp'
 local options = require 'mp.options'
 
 local opts = {
-    fade_out_duration = 0.45,   -- Duration of fade-out in seconds (slightly longer)
+    fade_out_duration = 0.45,   -- Duration of fade-out in seconds
     fade_in_duration = 0.3,     -- Duration of fade-in in seconds
     steps = 12,                 -- Number of volume steps for smooth transition
     logarithmic_fade = true,    -- Use logarithmic fading for more natural sound
 }
 
-options.read_options(opts)
+-- Read options with explicit script name
+options.read_options(opts, "gradual_pause")
 
-local original_volume = 100
+local original_volume = 50
 local pause_position = nil
 local fade_timer = nil
 local is_fading = false
 local script_handling_pause = false
 
+-- Reset timer to prevent conflicts
+function reset_timer()
+    if fade_timer then
+        fade_timer:kill()
+        fade_timer = nil
+    end
+end
+
 -- Save the current volume
 function save_volume()
-    original_volume = mp.get_property_number("volume", 100)
+    original_volume = mp.get_property_number("volume", original_volume)
 end
 
 -- Save the current playback position
@@ -48,17 +53,20 @@ end
 
 -- Handle fade out when pausing
 function fade_out_and_pause()
-    if is_fading then return end
+    -- Set our state flags
     is_fading = true
+    script_handling_pause = true
     
-    -- Save current volume before starting fade
+    -- Save current volume and position
     save_volume()
-    
-    -- Save current playback position
     save_position()
     
-    -- Temporarily disable our pause handler to avoid recursion
-    script_handling_pause = true
+    -- Cancel any existing timer before creating a new one
+    reset_timer()
+    
+    -- IMPORTANT FIX: First ensure we're unpaused before starting fade
+    -- This prevents MPRIS/external tools from causing an abrupt pause
+    mp.set_property_bool("pause", false)
     
     local step_time = opts.fade_out_duration / opts.steps
     local vol_step = original_volume / opts.steps
@@ -75,17 +83,18 @@ function fade_out_and_pause()
         -- When fade is complete, actually pause the player
         if current_step >= opts.steps then
             fade_timer:kill()
+            fade_timer = nil
+            
             -- We're doing the actual pause operation ourselves
             mp.set_property_bool("pause", true)
             
-            -- IMPORTANT FIX: Restore the volume after pausing
-            -- This ensures MPV doesn't save state with volume at 0
+            -- Restore the volume after pausing -
+            --  without this, mpv might start with 0 volume if user exited after pausing
             mp.set_property("volume", original_volume)
             
-            is_fading = false
-            
-            -- Re-enable the pause property observer after a brief delay
+            -- Reset our flags with a slight delay
             mp.add_timeout(0.1, function()
+                is_fading = false
                 script_handling_pause = false
             end)
         end
@@ -94,21 +103,23 @@ end
 
 -- Handle fade in when unpausing
 function unpause_and_fade_in()
-    if is_fading then return end
+    -- Set our state flags
     is_fading = true
+    script_handling_pause = true
+    
+    -- Cancel any existing timer before creating a new one
+    reset_timer()
     
     -- Restore the position we were at when we started fading out
     if pause_position ~= nil then
         mp.set_property_number("time-pos", pause_position)
     end
     
-    -- Temporarily disable our pause handler to avoid recursion
-    script_handling_pause = true
+    -- Save current volume in case it changed while paused
+    save_volume()
     
-    -- Make sure volume starts at 0
+    -- Volume to 0, and Unpause
     mp.set_property("volume", 0)
-    
-    -- Unpause immediately (audio will be silent at first)
     mp.set_property_bool("pause", false)
     
     local step_time = opts.fade_in_duration / opts.steps
@@ -126,50 +137,78 @@ function unpause_and_fade_in()
         -- When fade is complete, restore volume and reset
         if current_step >= opts.steps then
             fade_timer:kill()
+            fade_timer = nil
             mp.set_property("volume", original_volume)
-            is_fading = false
             
-            -- Re-enable the pause property observer
+            -- Reset our flags with a slight delay
             mp.add_timeout(0.1, function()
+                is_fading = false
                 script_handling_pause = false
             end)
         end
     end)
 end
 
+-- Handle key press directly (bypassing MPV's pause property)
+function handle_pause_key()
+    -- If we're currently fading, ignore the key press
+    if is_fading then
+        return true
+    end
+    
+    local is_paused = mp.get_property_bool("pause")
+    
+    if is_paused then
+        unpause_and_fade_in()
+    else
+        fade_out_and_pause()
+    end
+    
+    -- Return true to prevent default handler
+    return true
+end
+
 -- Handle pause property changes (from any source)
 function on_pause_change(name, value)
     -- Skip if we're the ones changing the pause state
     if script_handling_pause then
-        return
+        return true
     end
     
-    -- Cancel any active fade
-    if fade_timer then
-        fade_timer:kill()
-        fade_timer = nil
+    -- If we're currently fading, ignore external pause changes
+    if is_fading then
+        return true
     end
     
     if value then
+        mp.set_property_bool("pause", false)
         -- Something just paused the player - fade out
         fade_out_and_pause()
     else
         -- Something just unpaused the player - fade in
         unpause_and_fade_in()
     end
+
+    return true
 end
 
--- Clean up any running timers when the file is closed or player exits
+-- Clean up when the file is closed or player exits
 function cleanup()
-    if fade_timer then
-        fade_timer:kill()
-    end
+    reset_timer()
+    is_fading = false
+    script_handling_pause = false
 end
+
+-- Direct bindings to override default behavior
+mp.add_forced_key_binding("space", "gradual_pause_space", handle_pause_key)
+mp.add_forced_key_binding("p", "gradual_pause_p", handle_pause_key)
 
 -- Register event handlers
 mp.observe_property("pause", "bool", on_pause_change)
 mp.register_event("end-file", cleanup)
 mp.register_event("shutdown", cleanup)
 
--- Log that the script has been loaded
-mp.msg.info("Gradual pause/unpause script loaded")
+-- Initialize state
+reset_timer()
+is_fading = false
+script_handling_pause = false
