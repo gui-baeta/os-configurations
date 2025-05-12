@@ -2,7 +2,7 @@
 {
   imports = [
     ./sops-configs.nix
-    # ./music.nix
+    ./music.nix
   ];
   networking.hosts = {
     "192.168.1.1" = [ "rectangular-cuboid" ];
