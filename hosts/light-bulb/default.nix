@@ -24,6 +24,7 @@
     # Home VPN thingdadoo
     # ./home-vpn.nix
     #
+    ./music-server.nix
   ];
 
   services.fstrim.enable = true; # Enabled by default

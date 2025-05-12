@@ -460,6 +460,7 @@
       "networkmanager"
       "wheel"
       "gamemode"
+      "navidrome"
     ];
     shell = pkgs.fish;
     useDefaultShell = true;
