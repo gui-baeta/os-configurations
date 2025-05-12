@@ -1,4 +1,4 @@
-{ pkgs, unstable-pkgs, ... }:
+{ pkgs, ... }:
 {
   # installed packages, system(-profile)-wide.
   # To search, run: `$ nix search wget`
@@ -37,7 +37,7 @@
     ])
     #
     # not-so-unstable pkgs go heeeeeeeeeeeere
-    ++ (with unstable-pkgs; [
+    ++ (with pkgs.unstable; [
       nixos-anywhere
       #
       # another game launcher - (my understanding) purpose is to try to compile fixes and tweaks for games

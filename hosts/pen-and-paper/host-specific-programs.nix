@@ -1,7 +1,4 @@
-{ pkgs, unstable-pkgs, ... }:
+{ pkgs, ... }:
 {
-  environment.systemPackages =
-    (with pkgs; [
-    ])
-    ++ (with unstable-pkgs; [ ]);
+  environment.systemPackages = [ ];
 }

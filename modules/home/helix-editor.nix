@@ -1,12 +1,11 @@
 {
   pkgs,
-  unstable-pkgs,
   ...
 }:
 {
 
-  programs.helix.package = unstable-pkgs.helix;
-  programs.helix.extraPackages = with unstable-pkgs; [
+  programs.helix.package = pkgs.unstable.helix;
+  programs.helix.extraPackages = with pkgs.unstable; [
     simple-completion-language-server
   ];
 
@@ -26,8 +25,8 @@
       terraform-ls
     ])
     ++
-      # Packages from unstable-pkgs
-      (with unstable-pkgs; [
+      # Packages from pkgs.unstable
+      (with pkgs.unstable; [
         # language server integrating LLMs
         lsp-ai
         # generic-ish lang server

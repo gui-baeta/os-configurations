@@ -1,8 +1,8 @@
-{ unstable-pkgs, ... }:
+{ pkgs, ... }:
 {
   programs.ncspot = {
     enable = true;
-    package = unstable-pkgs.ncspot;
+    package = pkgs.unstable.ncspot;
     settings = {
       flip-status-indicators = false;
       hide_display_names = true;

@@ -1,6 +1,5 @@
 {
   pkgs,
-  unstable-pkgs,
   config,
   ...
 }:
@@ -20,12 +19,12 @@ in
   };
 
   environment.systemPackages = [
-    unstable-pkgs.cloudflared
+    pkgs.unstable.cloudflared
     pkgs.openvpn # for key generation
   ];
 
   services.cloudflared = {
-    package = unstable-pkgs.cloudflared;
+    package = pkgs.unstable.cloudflared;
     tunnels = {
       "b6126611-223d-49f2-82f4-c4e042c55f6b" = {
         default = "http_status:404";

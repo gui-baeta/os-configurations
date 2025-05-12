@@ -4,7 +4,6 @@
 
 {
   pkgs,
-  unstable-pkgs,
   lib,
   config,
   options,
@@ -360,7 +359,7 @@
 
         sticky-notes
       ])
-      ++ (with unstable-pkgs; [
+      ++ (with pkgs.unstable; [
         # remote desktop client
         vmware-horizon-client
       ]);

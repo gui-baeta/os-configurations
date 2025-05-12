@@ -13,10 +13,6 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    #
-    # Generic good-to-have configurations for various hardware
-    # configurations for quirky hardware and linux behavior
-    # nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -47,19 +43,49 @@
       disko,
       ...
     }@inputs:
+    let
+      # Helper function to create a customized package set
+      mkPkgs =
+        { system }:
+        let
+          # Unstable package set
+          unstablePkgs = import nixpkgs-unstable {
+            inherit system;
+            config.allowUnfree = true;
+          };
+
+          # Define the unstable overlay
+          unstableOverlay = final: prev: {
+            unstable = unstablePkgs;
+          };
+          # customOverlay = import ./overlays/default.nix;
+
+          # Combine all overlays
+          allOverlays = [
+            unstableOverlay
+            (final: prev: {
+              mpvScripts = prev.mpvScripts // {
+                gradual-pause = final.callPackage ./overlays/mpv/gradual-pause/package.nix { };
+              };
+            })
+          ];
+
+          # Apply all overlays at once
+          finalPkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+            overlays = allOverlays;
+          };
+        in
+        finalPkgs;
+    in
     {
       nixosConfigurations.pen-and-paper = nixpkgs.lib.nixosSystem rec {
         system = "x86_64-linux";
         specialArgs = {
           inherit inputs;
-          unstable-pkgs = import nixpkgs-unstable {
-            inherit system;
-            config.allowUnfree = true;
-          };
-          pkgs = import nixpkgs {
-            inherit system;
-            config.allowUnfree = true;
-          };
+          # Just use the unified package set
+          pkgs = mkPkgs { inherit system; };
         };
         modules = [
           ./modules/.
@@ -94,30 +120,10 @@
 
               extraSpecialArgs = {
                 inherit inputs;
-                # SEE:
-                #   - https://github.com/chris-martin/home/blob/eb12e3c02d25bb1b2b2624021bd8479996352a4c/os/flake.nix
-                #   - https://github.com/chris-martin/home/blob/dc79903c93f654108ea3c05cfd779bdef72eb584/os/home/modules/packages.nix
-                #   - https://www.reddit.com/r/NixOS/comments/12ewa4j/newbie_how_to_use_unstable_packages_in/
-                #
-                # NOTE  SEE: https://github.com/Misterio77/nix-config/blob/main/flake.nix#L119C1-L126C9
-                # I can do a let before defining the outputs
-                unstable-pkgs = import nixpkgs-unstable {
-                  inherit system;
-                  config.allowUnfree = true;
-                };
-                pkgs = import nixpkgs {
-                  inherit system;
-                  config.allowUnfree = true;
-                };
-
-                # FIXME Dont know how to use it in flake. Put in module
-                #   inherit inputs;
-                #   # https://github.com/TLATER/dotfiles/blob/d6dd373a4de4e0f33224883c690fa6536d57ab89/nixos-config/default.nix#L63
-                #   nixos-config = config;
+                pkgs = mkPkgs { inherit system; };
               };
             };
           }
-
         ];
       };
 
@@ -125,14 +131,8 @@
         system = "x86_64-linux";
         specialArgs = {
           inherit inputs;
-          unstable-pkgs = import nixpkgs-unstable {
-            inherit system;
-            config.allowUnfree = true;
-          };
-          pkgs = import nixpkgs {
-            inherit system;
-            config.allowUnfree = true;
-          };
+          # Just use the unified package set
+          pkgs = mkPkgs { inherit system; };
         };
         modules = [
           ./modules/.
@@ -164,14 +164,7 @@
 
               extraSpecialArgs = {
                 inherit inputs;
-                unstable-pkgs = import nixpkgs-unstable {
-                  inherit system;
-                  config.allowUnfree = true;
-                };
-                pkgs = import nixpkgs {
-                  inherit system;
-                  config.allowUnfree = true;
-                };
+                pkgs = mkPkgs { inherit system; };
               };
             };
           }
