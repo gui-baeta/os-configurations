@@ -1,6 +1,9 @@
 { ... }:
 {
-  imports = [ ./sops-configs.nix ];
+  imports = [
+    ./sops-configs.nix
+    # ./music.nix
+  ];
   networking.hosts = {
     "192.168.1.1" = [ "rectangular-cuboid" ];
     "192.168.1.10" = [ "light-bulb" ];

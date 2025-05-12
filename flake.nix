@@ -29,6 +29,10 @@
       url = "git+ssh://git@github.com/gui-baeta/os-configurations-secrets?ref=main";
       flake = false;
     };
+    my-music = {
+      url = "git+ssh://git@github.com/gui-baeta/os-configurations-music?ref=main";
+      flake = false;
+    };
   };
 
   outputs =

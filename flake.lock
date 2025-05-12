@@ -2,9 +2,7 @@
   "nodes": {
     "disko": {
       "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
+        "nixpkgs": ["nixpkgs"]
       },
       "locked": {
         "lastModified": 1746638861,
@@ -91,9 +89,7 @@
     },
     "home-manager": {
       "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
+        "nixpkgs": ["nixpkgs"]
       },
       "locked": {
         "lastModified": 1746171682,
@@ -108,6 +104,23 @@
         "ref": "release-24.11",
         "repo": "home-manager",
         "type": "github"
+      }
+    },
+    "my-music": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1747051736,
+        "narHash": "sha256-GBK4+OHfBGigIb0EFF/1S3UT743ysGt8rJOzNS8ORew=",
+        "ref": "main",
+        "rev": "c5c3bad93e0b9d68c7caf05678ede7ef415ebf74",
+        "revCount": 1,
+        "type": "git",
+        "url": "ssh://git@github.com/gui-baeta/os-configurations-music"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "ssh://git@github.com/gui-baeta/os-configurations-music"
       }
     },
     "my-secrets": {
@@ -129,9 +142,7 @@
     },
     "nix-index-database": {
       "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
+        "nixpkgs": ["nixpkgs"]
       },
       "locked": {
         "lastModified": 1746330942,
@@ -183,6 +194,7 @@
       "inputs": {
         "disko": "disko",
         "home-manager": "home-manager",
+        "my-music": "my-music",
         "my-secrets": "my-secrets",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs",
@@ -195,10 +207,7 @@
       "inputs": {
         "flake-compat": "flake-compat_2",
         "flake-utils-plus": "flake-utils-plus",
-        "nixpkgs": [
-          "solaar",
-          "nixpkgs"
-        ]
+        "nixpkgs": ["solaar", "nixpkgs"]
       },
       "locked": {
         "lastModified": 1718097323,
@@ -218,9 +227,7 @@
     "solaar": {
       "inputs": {
         "flake-compat": "flake-compat",
-        "nixpkgs": [
-          "nixpkgs"
-        ],
+        "nixpkgs": ["nixpkgs"],
         "snowfall-lib": "snowfall-lib"
       },
       "locked": {
@@ -238,9 +245,7 @@
     },
     "sops-nix": {
       "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
+        "nixpkgs": ["nixpkgs"]
       },
       "locked": {
         "lastModified": 1746485181,
