@@ -1,8 +1,5 @@
 { config, ... }:
 {
-  sops.secrets."smartcat/groq" = { };
-  sops.secrets."smartcat/anthropic" = { };
-  sops.secrets."smartcat/mistral" = { };
   # sops.templates."smartcat-api_configs.toml".content = ''
   #   password = "${config.sops.placeholder.your-secret}"
   # '';

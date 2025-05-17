@@ -3,6 +3,7 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 {
+  userInf,
   pkgs,
   lib,
   config,
@@ -287,10 +288,10 @@
   services.libinput.touchpad.tapping = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.guibaeta = {
-    uid = 1000;
+  users.users."${userInf.nick}" = {
+    uid = userInf.uid;
     isNormalUser = true;
-    description = "Guilherme Fontes";
+    description = "${userInf.name}";
     extraGroups = [
       "networkmanager"
       "wheel"

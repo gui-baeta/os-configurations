@@ -1,4 +1,5 @@
 {
+  userInf,
   lib,
   pkgs,
   inputs,
@@ -53,7 +54,7 @@
         "nix-ssh" # for *sshServe*. see above
         "@wheel"
         "root"
-        "guibaeta"
+        "${userInf.nick}"
       ];
 
       auto-optimise-store = true;

@@ -1,10 +1,10 @@
 {
+  userInf,
   inputs,
-  sops-nix,
+  my-secrets,
   config,
   ...
 }:
-
 {
   imports = [
     ./helix-editor.nix
@@ -13,20 +13,12 @@
     ./smartcat/default.nix
     ./firefox.nix
     ./git.nix
+    ./sops.nix
   ];
 
   programs.home-manager.enable = true;
 
   home.stateVersion = "24.11";
-
-  home.username = "guibaeta";
-  home.homeDirectory = "/home/guibaeta";
-
-  sops = {
-    defaultSopsFile = "${inputs.my-secrets}/secrets.yaml";
-    defaultSopsFormat = "yaml";
-    age.keyFile = "/home/${config.home.username}/.config/sops/age/keys.txt";
-    defaultSymlinkPath = "/run/user/1000/secrets";
-    defaultSecretsMountPoint = "/run/user/1000/secrets.d";
-  };
+  home.username = userInf.nick;
+  home.homeDirectory = userInf.homeDir;
 }

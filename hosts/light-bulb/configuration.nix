@@ -3,6 +3,7 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 {
+  userInf,
   pkgs,
   lib,
   options,
@@ -452,10 +453,10 @@
   };
   #
   # the user account
-  users.users.guibaeta = {
-    uid = 1000;
+  users.users."${userInf.nick}" = {
+    uid = userInf.uid;
     isNormalUser = true;
-    description = "Guilherme Fontes";
+    description = "${userInf.name}";
     extraGroups = [
       "networkmanager"
       "wheel"

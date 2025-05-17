@@ -42,6 +42,7 @@
       nixpkgs-unstable,
       home-manager,
       nix-index-database,
+      my-secrets,
       sops-nix,
       solaar,
       disko,
@@ -68,12 +69,19 @@
           };
         in
         finalPkgs;
+      userInf = {
+        nick = "guibaeta";
+        name = "Guilherme Fontes";
+        homeDir = "/home/${userInf.nick}";
+        uid = 1000;
+      };
     in
     {
       nixosConfigurations.pen-and-paper = nixpkgs.lib.nixosSystem rec {
         system = "x86_64-linux";
         specialArgs = {
           inherit inputs;
+          inherit userInf;
           # Just use the unified package set
           # pkgs = mkPkgs { inherit system; };
           pkgs = pkgs { inherit system; };
@@ -102,15 +110,15 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              users.guibaeta = {
+              users.${userInf.nick} = {
                 imports = [
-                  sops-nix.homeManagerModule
+                  sops-nix.homeManagerModules.sops
                   ./modules/home/home.nix
                 ];
               };
-
               extraSpecialArgs = {
-                inherit inputs;
+                inherit my-secrets;
+                inherit userInf;
                 pkgs = pkgs { inherit system; };
               };
             };
@@ -122,6 +130,7 @@
         system = "x86_64-linux";
         specialArgs = {
           inherit inputs;
+          inherit userInf;
           # Just use the unified package set
           # pkgs = mkPkgs { inherit system; };
           pkgs = pkgs { inherit system; };
@@ -147,15 +156,14 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              users.guibaeta = {
+              users.${userInf.nick} = {
                 imports = [
-                  sops-nix.homeManagerModule
-                  "${self}/modules/home/home.nix"
+                  sops-nix.homeManagerModules.sops
+                  ./modules/home/home.nix
                 ];
               };
-
               extraSpecialArgs = {
-                inherit inputs;
+                inherit userInf;
                 pkgs = pkgs { inherit system; };
               };
             };

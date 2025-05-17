@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ userInf, pkgs, ... }:
 {
   services.navidrome = {
     enable = true;
@@ -6,9 +6,9 @@
     settings = {
       Address = "0.0.0.0";
       Port = 4533;
-      MusicFolder = "/home/guibaeta/Music/navidrome/music";
-      DataFolder = "/home/guibaeta/Music/navidrome/data";
-      CacheFolder = "/home/guibaeta/Music/navidrome/data/cache";
+      MusicFolder = "${userInf.homeDir}/Music/navidrome/music";
+      DataFolder = "${userInf.homeDir}/Music/navidrome/data";
+      CacheFolder = "${userInf.homeDir}/Music/navidrome/data/cache";
       AutoImportPlaylists = true;
       EnableInsightsCollector = false;
       Jukebox.Enabled = false;
