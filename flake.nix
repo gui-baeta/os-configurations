@@ -48,37 +48,23 @@
       ...
     }@inputs:
     let
-      # Helper function to create a customized package set
-      mkPkgs =
+      pkgs =
         { system }:
         let
-          # Unstable package set
+          stablePkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
           unstablePkgs = import nixpkgs-unstable {
             inherit system;
             config.allowUnfree = true;
           };
-
-          # Define the unstable overlay
-          unstableOverlay = final: prev: {
+          finalPkgs = stablePkgs // {
             unstable = unstablePkgs;
-          };
-          # customOverlay = import ./overlays/default.nix;
 
-          # Combine all overlays
-          allOverlays = [
-            unstableOverlay
-            (final: prev: {
-              mpvScripts = prev.mpvScripts // {
-                gradual-pause = final.callPackage ./overlays/mpv/gradual-pause/package.nix { };
-              };
-            })
-          ];
-
-          # Apply all overlays at once
-          finalPkgs = import nixpkgs {
-            inherit system;
-            config.allowUnfree = true;
-            overlays = allOverlays;
+            mpvScripts = stablePkgs.mpvScripts // {
+              gradual-pause = stablePkgs.callPackage ./overlays/mpv/gradual-pause/package.nix { };
+            };
           };
         in
         finalPkgs;
@@ -89,7 +75,8 @@
         specialArgs = {
           inherit inputs;
           # Just use the unified package set
-          pkgs = mkPkgs { inherit system; };
+          # pkgs = mkPkgs { inherit system; };
+          pkgs = pkgs { inherit system; };
         };
         modules = [
           ./modules/.
@@ -124,7 +111,7 @@
 
               extraSpecialArgs = {
                 inherit inputs;
-                pkgs = mkPkgs { inherit system; };
+                pkgs = pkgs { inherit system; };
               };
             };
           }
@@ -136,7 +123,8 @@
         specialArgs = {
           inherit inputs;
           # Just use the unified package set
-          pkgs = mkPkgs { inherit system; };
+          # pkgs = mkPkgs { inherit system; };
+          pkgs = pkgs { inherit system; };
         };
         modules = [
           ./modules/.
@@ -168,7 +156,7 @@
 
               extraSpecialArgs = {
                 inherit inputs;
-                pkgs = mkPkgs { inherit system; };
+                pkgs = pkgs { inherit system; };
               };
             };
           }
