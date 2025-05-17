@@ -465,14 +465,7 @@
 
     packages = with pkgs; [
       # firefox browser, wrapped with an argument.. I don't remember why....
-      (pkgs.symlinkJoin {
-        name = "firefox-overlay";
-        paths = [ pkgs.firefox ];
-        buildInputs = [ pkgs.makeWrapper ];
-        postBuild = ''
-          wrapProgram $out/bin/firefox --set GTK_IM_MODULE xim
-        '';
-      })
+      firefox
       #
       # chrome browser, for when websites don't like firefox
       google-chrome
