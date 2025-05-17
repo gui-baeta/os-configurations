@@ -6,24 +6,15 @@
 {
   environment.variables.EDITOR = "hx";
 
-  programs.git = {
-    enable = true;
-    lfs.enable = true;
-  };
-
+  #
   # Keys and Signing
-  programs.gnupg = {
-    agent = {
-      enable = true;
-      enableSSHSupport = true;
-      enableBrowserSocket = false;
-    };
-  };
+  #
+  # MANAGED_BY: Home Manager
+  programs.gnupg.agent.enable = false;
 
   #
   # Programs that are useful on any host
-  #
-  #  NOTE To search for packages, we can run: `$ nix search wget`
+  # : To search for packages, we can run: `$ nix search wget`
   environment.systemPackages = with pkgs; [
     # encryption tool
     age

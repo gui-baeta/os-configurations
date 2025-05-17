@@ -10,7 +10,7 @@
     # memoryPercent = 50; # % Percent - default 50
   };
   #
-  # WARNING: enabling system bus notify makes the machine open to DoS attacks if other local users are mean and spam notifications.
+  # NOTE: enabling system bus notify makes the machine open to DoS attacks if other local users are mean and spam notifications.
   #
   # Enable System bus notification support
   services.systembus-notify.enable = true;

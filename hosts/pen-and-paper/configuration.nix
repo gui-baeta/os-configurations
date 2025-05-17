@@ -245,15 +245,6 @@
   # Enable Screen Sharing
   xdg.portal.wlr.enable = true;
 
-  # Keys and Signing
-  programs.gnupg = {
-    agent = {
-      enable = true;
-      enableSSHSupport = true;
-      enableBrowserSocket = false;
-    };
-  };
-
   # Fix some linking problems
   programs.nix-ld.enable = true;
 
@@ -385,12 +376,6 @@
     # Transmission remote connection
     9091
   ];
-
-  # Fish shell
-  programs.fish.enable = true;
-
-  # Direnv - To automatically setup nix shells when entering a project directory
-  programs.direnv.enable = true;
 
   # Enable IPv6 globally (May want to manually disable for each VPN connection, if the provider doesn't support it)
   networking.enableIPv6 = true;

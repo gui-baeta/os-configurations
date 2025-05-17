@@ -301,13 +301,6 @@
     list_profile_packages = "nix-store --query --requisites /run/current-system | cut -d- -f2- | sort -u";
   };
 
-  # Direnv - To automatically setup nix shells when entering a project directory
-  programs.direnv.enable = true;
-
-  # NOTE Interesting
-  # Git
-  programs.git.enable = true;
-
   # Fix some linking problems
   programs.nix-ld.enable = true;
 
