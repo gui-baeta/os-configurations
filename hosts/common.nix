@@ -3,6 +3,7 @@
   imports = [
     ./sops-configs.nix
     ./music.nix
+    ./yubiyubi.nix
   ];
 
   documentation.man.generateCaches = true;

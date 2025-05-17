@@ -44,6 +44,12 @@
               settings = {
                 allowDiscards = true;
                 bypassWorkqueues = true;
+                crypttabExtraOpts = [
+                  "fido2-device=auto"
+                  "fido2-with-client-pin=no"
+                  "fido2-with-user-presence=yes" # default
+                  "token-timeout=10"
+                ];
               };
               content = {
                 type = "btrfs";

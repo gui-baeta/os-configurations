@@ -106,8 +106,27 @@
 
   boot.loader.grub.enable = false;
   boot.loader.systemd-boot.enable = true;
+
+  boot.initrd = {
+    #
+    # for FIDO2 LUKS decryption support
+    # SEE: https://haseebmajid.dev/posts/2024-07-30-how-i-setup-btrfs-and-luks-on-nixos-using-disko/
+    # AND: https://wiki.archlinux.org/title/Systemd-cryptenroll
+    systemd.enable = true; # Not strictly necessary for FIDO2 LUKS decryption, but seems easier
+    #
+    # Enable support for the YubiKey PBA
+    # NOTE: - systemd stage 1 does not support Yubikeys yet.
+    # luks.yubikeySupport = true;
+  };
+
   boot.loader.efi.canTouchEfiVariables = true;
 
+  boot.initrd.kernelModules = [
+    "vfat"
+    "nls_cp437"
+    "nls_iso8859-1"
+    "usbhid"
+  ];
   boot.initrd.availableKernelModules = [
     "rtsx_pci_sdmmc"
     "dm_thin_pool"

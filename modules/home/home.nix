@@ -13,6 +13,7 @@
     ./smartcat/default.nix
     ./firefox.nix
     ./git.nix
+    ./yubiyubi.nix
     ./sops.nix
   ];
 
