@@ -261,9 +261,6 @@
   # "modesetting" (Kernel Mode Setting) uses Mesa drivers directly
   services.xserver.videoDrivers = [ "modesetting" ];
 
-  # Enable Screen Sharing
-  xdg.portal.wlr.enable = true;
-
   # Fix some linking problems
   programs.nix-ld.enable = true;
 
@@ -301,10 +298,12 @@
   users.users."${userInf.nick}" = {
     uid = userInf.uid;
     isNormalUser = true;
-    description = "${userInf.name}";
+    description = "the user";
     extraGroups = [
+      "gamemode"
       "networkmanager"
       "wheel"
+      "keys"
     ];
     shell = pkgs.fish;
     useDefaultShell = true;

@@ -130,11 +130,11 @@
     "my-secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1747479991,
-        "narHash": "sha256-FXy/+jcAKDh4rULEBG4iz1+U99NFkNLlTRdmrl7r9z0=",
+        "lastModified": 1747574164,
+        "narHash": "sha256-JjUcb7R5eSSMqKNLzYnUzfMqDVsaRoV0WCl01iGiPUk=",
         "ref": "main",
-        "rev": "7c431f4ea728790b170d5832d77e8e0e1d53fee5",
-        "revCount": 5,
+        "rev": "a0abf059caaf603521672ebbb087edd09f27c4b4",
+        "revCount": 11,
         "type": "git",
         "url": "ssh://git@github.com/gui-baeta/os-configurations-secrets"
       },

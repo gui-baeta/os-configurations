@@ -10,6 +10,8 @@
   # Keys and Signing
   #
   # MANAGED_BY: Home Manager
+  # TODO: Move this back to here from home-manager
+  #         Use home-manager to write tot he scdaemon configs, and stuff like that
   programs.gnupg.agent.enable = false;
 
   #

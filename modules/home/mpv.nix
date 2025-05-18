@@ -18,8 +18,8 @@
     };
     scripts = with pkgs; [
       # mpvScripts.autosub
-      unstable.mpvScripts.thumbnail
-      unstable.mpvScripts.mpris
+      # unstable.mpvScripts.thumbnail
+      mpvScripts.mpris
       mpvScripts.gradual-pause
     ];
 

@@ -64,7 +64,7 @@ function fade_out_and_pause()
     -- Cancel any existing timer before creating a new one
     reset_timer()
     
-    -- IMPORTANT FIX: First ensure we're unpaused before starting fade
+    -- First ensure we're unpaused before starting fade
     -- This prevents MPRIS/external tools from causing an abrupt pause
     mp.set_property_bool("pause", false)
     

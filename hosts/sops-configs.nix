@@ -1,18 +1,22 @@
 {
   inputs,
+  my-secrets,
   userInf,
-  config,
-  sops-nix,
-  pkgs,
   ...
 }:
 {
   sops = {
-    defaultSopsFile = "${inputs.my-secrets}/secrets.yaml";
+    defaultSopsFile = "${inputs.my-secrets}/hosts.enc.yaml";
     defaultSopsFormat = "yaml";
     age.keyFile = "${userInf.homeDir}/.config/sops/age/keys.txt";
     secrets = {
       "yubikey/auth-maps" = { };
+      "db-keyfile" = {
+        sopsFile = "${inputs.my-secrets}/db-info.enc.yaml";
+        key = "keyfile";
+        group = "keys";
+        mode = "0440";
+      };
     };
   };
 }

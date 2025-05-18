@@ -1,8 +1,6 @@
 {
   userInf,
-  inputs,
-  my-secrets,
-  config,
+  lib,
   ...
 }:
 {
@@ -16,6 +14,8 @@
     ./yubiyubi.nix
     ./sops.nix
   ];
+
+  services.gnome-keyring.enable = lib.mkForce false;
 
   programs.man.generateCaches = true;
   programs.fish.enable = true;

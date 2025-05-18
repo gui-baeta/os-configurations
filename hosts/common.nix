@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 {
   imports = [
     ./sops-configs.nix
@@ -29,6 +29,16 @@
     enableBashIntegration = true;
     enableFishIntegration = true;
   };
+
+  environment.variables.XDG_RUNTIME_DIR = "/run/user/$UID";
+  xdg.portal.enable = true;
+  xdg.portal.wlr.enable = true; # Enable Screen Sharing
+  services.dbus.enable = true;
+  # to enable org.freedesktop.secrets.service
+  services.passSecretService.enable = true;
+  services.gnome.gnome-keyring.enable = lib.mkForce false;
+  security.pam.services.gdm.enableGnomeKeyring = lib.mkForce false;
+
   networking.hosts = {
     "192.168.1.1" = [ "rectangular-cuboid" ];
     "192.168.1.10" = [ "light-bulb" ];

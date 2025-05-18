@@ -71,12 +71,13 @@
         finalPkgs;
       userInf = {
         nick = "guibaeta";
-        name = "Guilherme Fontes";
         homeDir = "/home/${userInf.nick}";
         uid = 1000;
       };
     in
     {
+      formatter."x86_64-linux" = (pkgs { system = "x86_64-linux"; }).nixfmt-rfc-style;
+
       nixosConfigurations.pen-and-paper = nixpkgs.lib.nixosSystem rec {
         system = "x86_64-linux";
         specialArgs = {
@@ -173,7 +174,7 @@
       #
       # Custom live NixOS image
       # network hostname is `iso-image` and it allows ssh-ing from light-bulb
-      nixosConfigurations.iso-image = nixpkgs.lib.nixosSystem rec {
+      nixosConfigurations.iso-image = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
           ./hosts/iso-image/.

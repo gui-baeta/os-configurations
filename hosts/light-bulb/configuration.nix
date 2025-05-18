@@ -187,9 +187,6 @@
   services.xserver.enable = true;
   services.xserver.videoDrivers = [ "modesetting" ]; # Either this or "amdgpu-pro"
 
-  # Enable Screen Sharing
-  xdg.portal.wlr.enable = true;
-
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
@@ -449,12 +446,13 @@
   users.users."${userInf.nick}" = {
     uid = userInf.uid;
     isNormalUser = true;
-    description = "${userInf.name}";
+    description = "the user";
     extraGroups = [
+      "gamemode"
       "networkmanager"
       "wheel"
-      "gamemode"
       "navidrome"
+      "keys"
     ];
     shell = pkgs.fish;
     useDefaultShell = true;
