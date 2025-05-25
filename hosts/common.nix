@@ -13,6 +13,13 @@
     enable = true;
     shellAbbrs = {
       ll = "ls -la";
+      hx = "hx .";
+      gitstatus = "git status";
+      gitstatusv = "git status -v";
+      gitaddp = "git add -p";
+      gitcommitm = "git commit -m";
+      gitrestorep = "git restore -p";
+      gitrestorestagedp = "git restore --staged -p";
     };
   };
   # Direnv - To automatically setup nix shells when entering a project directory
