@@ -2,6 +2,7 @@
   userInf,
   lib,
   pkgs,
+  nixpkgs-unstable,
   inputs,
   ...
 }:
@@ -21,16 +22,21 @@
   # Necessary for opening links in gnome under certain conditions
   services.gvfs.enable = true;
 
-  # Allow unfree packages
-  nixpkgs.config = {
-    allowUnfree = true;
-    # allowUnfreePredicate = true;
-
-    allowUnfreePredicate =
-      pkg:
-      builtins.elem (lib.getName pkg) [
-        "vmware-horizon-client"
-      ];
+  nixpkgs = {
+    config = {
+      # Allow unfree packages
+      allowUnfree = true;
+    };
+    overlays = [
+      (final: _: {
+        # this allows you to access `pkgs.unstable` anywhere in your config
+        unstable = import inputs.nixpkgs-unstable {
+          inherit (final.stdenv.hostPlatform) system;
+          inherit (final) config;
+        };
+      })
+      (import ../overlays/mpv/gradual-pause/overlay.nix)
+    ];
   };
 
   nix = {

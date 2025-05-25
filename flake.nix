@@ -49,26 +49,8 @@
       ...
     }@inputs:
     let
-      pkgs =
-        { system }:
-        let
-          stablePkgs = import nixpkgs {
-            inherit system;
-            config.allowUnfree = true;
-          };
-          unstablePkgs = import nixpkgs-unstable {
-            inherit system;
-            config.allowUnfree = true;
-          };
-          finalPkgs = stablePkgs // {
-            unstable = unstablePkgs;
-
-            mpvScripts = stablePkgs.mpvScripts // {
-              gradual-pause = stablePkgs.callPackage ./overlays/mpv/gradual-pause/package.nix { };
-            };
-          };
-        in
-        finalPkgs;
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
       userInf = {
         nick = "guibaeta";
         homeDir = "/home/${userInf.nick}";
@@ -76,16 +58,13 @@
       };
     in
     {
-      formatter."x86_64-linux" = (pkgs { system = "x86_64-linux"; }).nixfmt-rfc-style;
+      formatter.${system} = pkgs.nixfmt-rfc-style;
 
-      nixosConfigurations.pen-and-paper = nixpkgs.lib.nixosSystem rec {
-        system = "x86_64-linux";
+      # the "nixpkgs.(...)" here, ends up being the automagically inherited `pkgs` argument
+      nixosConfigurations.pen-and-paper = nixpkgs.lib.nixosSystem {
         specialArgs = {
           inherit inputs;
           inherit userInf;
-          # Just use the unified package set
-          # pkgs = mkPkgs { inherit system; };
-          pkgs = pkgs { inherit system; };
         };
         modules = [
           ./modules/.
@@ -120,7 +99,6 @@
               extraSpecialArgs = {
                 inherit my-secrets;
                 inherit userInf;
-                pkgs = pkgs { inherit system; };
               };
             };
           }
@@ -132,9 +110,6 @@
         specialArgs = {
           inherit inputs;
           inherit userInf;
-          # Just use the unified package set
-          # pkgs = mkPkgs { inherit system; };
-          pkgs = pkgs { inherit system; };
         };
         modules = [
           ./modules/.
@@ -165,7 +140,6 @@
               };
               extraSpecialArgs = {
                 inherit userInf;
-                pkgs = pkgs { inherit system; };
               };
             };
           }
@@ -175,7 +149,6 @@
       # Custom live NixOS image
       # network hostname is `iso-image` and it allows ssh-ing from light-bulb
       nixosConfigurations.iso-image = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
         modules = [
           ./hosts/iso-image/.
           ./hosts/common.nix
@@ -195,6 +168,6 @@
       #
       # : To build custom live NixOS image
       # $ nix build .#iso-image
-      packages."x86_64-linux".iso-image = self.nixosConfigurations.iso-image.config.system.build.isoImage;
+      packages.${system}.iso-image = self.nixosConfigurations.iso-image.config.system.build.isoImage;
     };
 }
