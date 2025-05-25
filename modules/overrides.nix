@@ -49,6 +49,9 @@
       [org.gnome.desktop.screensaver]
       lock-enabled=true
 
+      [org.gnome.Console]
+      custom-font='FiraCode Nerd Font 10'
+
       [org.gnome.desktop.wm.preferences]
       audible-bell=false
       resize-with-right-button=true

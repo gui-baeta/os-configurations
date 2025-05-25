@@ -14,7 +14,7 @@
     enable = true;
     shellAbbrs = {
       ll = "ls -la";
-      hx = "hx .";
+      h = "hx .";
       gitstatus = "git status";
       gitstatusv = "git status -v";
       gitaddp = "git add -p";
