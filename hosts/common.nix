@@ -2,6 +2,7 @@
 {
   imports = [
     ./sops-configs.nix
+    ./keychain-doodads.nix
     ./music.nix
     ./yubiyubi.nix
   ];
@@ -43,8 +44,8 @@
   services.dbus.enable = true;
   # to enable org.freedesktop.secrets.service
   services.passSecretService.enable = true;
-  services.gnome.gnome-keyring.enable = lib.mkForce false;
-  security.pam.services.gdm.enableGnomeKeyring = lib.mkForce false;
+  # services.gnome.gnome-keyring.enable = lib.mkForce false;
+  # security.pam.services.gdm.enableGnomeKeyring = lib.mkForce false;
 
   networking.hosts = {
     "192.168.1.1" = [ "rectangular-cuboid" ];

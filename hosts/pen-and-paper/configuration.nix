@@ -311,7 +311,6 @@
     packages =
       (with pkgs; [
         # Browsers
-        firefox
         google-chrome
 
         # Note Taking
@@ -370,9 +369,6 @@
 
   # Some Firewall Rules
   networking.firewall.allowedTCPPorts = [
-    # Spotify - To sync local tracks from your filesystem with mobile devices
-    # in the same network, need to open port 57621:
-    57621
     # For BitTorrent
     51413
     # Transmission remote connection
@@ -380,7 +376,7 @@
   ];
 
   networking.firewall.allowedUDPPorts = [
-    # In order to enable discovery of Google Cast devices (and possibly other Spotify Connect devices) in the same network by the Spotify app, need to open UDP port 5353:
+    # In order to enable discovery of Google Cast devices in the same network by the Spotify app, need to open UDP port 5353:
     5353
     # BitTorrent
     51413

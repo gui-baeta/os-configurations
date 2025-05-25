@@ -87,8 +87,8 @@
       [org.gnome.shell]
       disabled-extensions=['apps-menu@gnome-shell-extensions.gcampax.github.com', 'auto-move-windows@gnome-shell-extensions.gcampax.github.com', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'native-window-placement@gnome-shell-extensions.gcampax.github.com', 'window-list@gnome-shell-extensions.gcampax.github.com', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com']
       disable-user-extensions=false
-      enabled-extensions=['caffeine@patapon.info', 'clipboard-history@alexsaveau.dev', 'gsconnect@andyholmes.github.io', 'blur-my-shell@aunetx']
-      favorite-apps=['firefox.desktop', 'org.gnome.Nautilus.desktop', 'spotify.desktop']
+      enabled-extensions=['caffeine@patapon.info', 'clipboard-history@alexsaveau.dev', 'gsconnect@andyholmes.github.io', 'blur-my-shell@aunetx', 'solaar-extension@sidevesh']
+      favorite-apps=['firefox.desktop', 'org.gnome.Nautilus.desktop']
       remember-mount-password=false
 
       [org.gnome.shell.weather]

@@ -3,11 +3,17 @@
   ...
 }:
 
+let
+  inter-gnome-v4 = pkgs.callPackage ../packages/inter-gnome-v4.nix { };
+in
 {
   # Available fonts
   fonts.packages = with pkgs; [
     nerd-fonts.fira-code
     nerd-fonts.droid-sans-mono
+
+    cantarell-fonts
+    inter-gnome-v4
 
     corefonts
     vistafonts

@@ -7,17 +7,17 @@
   environment.variables.EDITOR = "hx";
 
   #
-  # Keys and Signing
-  #
-  # MANAGED_BY: Home Manager
-  # TODO: Move this back to here from home-manager
-  #         Use home-manager to write tot he scdaemon configs, and stuff like that
-  programs.gnupg.agent.enable = false;
-
-  #
   # Programs that are useful on any host
   # : To search for packages, we can run: `$ nix search wget`
   environment.systemPackages = with pkgs; [
+    (pkgs.symlinkJoin {
+      name = "firefox-overlay";
+      paths = [ pkgs.firefox ];
+      buildInputs = [ pkgs.makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/firefox --set GTK_IM_MODULE xim
+      '';
+    })
     # encryption tool
     age
     ssh-to-age
@@ -29,8 +29,6 @@
     #
     # to edit gnome registry - kinda like windows registry
     dconf-editor
-    # spotify...
-    spotify
     #
     # don't like it, but very useful
     vscode
@@ -40,9 +38,7 @@
     gnomeExtensions.blur-my-shell
     gnomeExtensions.caffeine
     gnomeExtensions.gsconnect
-    #
-    # for integration with the solaar app - for Logitech devices
-    gnomeExtensions.solaar-extension
+    gnomeExtensions.solaar-extension # works with solaar - Logitech devices app
 
     # Some missing icons
     adwaita-icon-theme

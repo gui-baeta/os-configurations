@@ -1,6 +1,5 @@
 {
   inputs,
-  my-secrets,
   userInf,
   ...
 }:

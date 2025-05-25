@@ -15,7 +15,7 @@
     ./sops.nix
   ];
 
-  services.gnome-keyring.enable = lib.mkForce false;
+  # services.gnome-keyring.enable = lib.mkForce false;
 
   programs.man.generateCaches = true;
   programs.fish.enable = true;

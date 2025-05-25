@@ -2,6 +2,9 @@
   pkgs,
   ...
 }:
+let
+  gradual-pause = pkgs.callPackage ../../packages/gradual-pause/package.nix { };
+in
 {
   programs.mpv = {
     enable = true;
@@ -20,7 +23,7 @@
       # mpvScripts.autosub
       # unstable.mpvScripts.thumbnail
       mpvScripts.mpris
-      mpvScripts.gradual-pause
+      gradual-pause
     ];
 
     scriptOpts = {

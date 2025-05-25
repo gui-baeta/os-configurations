@@ -35,7 +35,6 @@
           inherit (final) config;
         };
       })
-      (import ../overlays/mpv/gradual-pause/overlay.nix)
     ];
   };
 

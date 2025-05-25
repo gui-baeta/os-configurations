@@ -1,4 +1,9 @@
-{ pkgs, config, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 #
 # Based on https://nixos.wiki/wiki/Yubikey
 # and some healthy amount of Arch Wiki
@@ -7,16 +12,12 @@
     # udev rules for yubikey
     udev.packages = [ pkgs.yubikey-personalization ];
     # to enable smartcard API thingy
-    pcscd.enable = true;
+    # pcscd.enable = true;
     yubikey-agent.enable = true;
   };
-  #
-  # udev rules for smartcard doodads
-  hardware.gpgSmartcards.enable = true;
-  #
-  # doodad to manage One-Time Password
   environment.systemPackages = [
     pkgs.gnupg
+    # doodad to manage OTPs (One-Time Passwords)
     pkgs.yubioath-flutter
     pkgs.yubikey-personalization
     pkgs.yubikey-manager
@@ -40,18 +41,23 @@
     # : If set, users can log in with SSH keys and PKCS#11 tokens.
     p11.enable = true; # SEE: https://github.com/OpenSC/pam_p11
   };
-  #
-  # MANAGED_BY: Home Manager
-  programs.gnupg.agent.enable = false;
+
+  # udev rules for smartcard doodads
+  hardware.gpgSmartcards.enable = true;
+  programs.gnupg.agent = {
+    enable = true;
+    enableBrowserSocket = true;
+    enableSSHSupport = true;
+  };
 
   # sops-nix will launch an scdaemon instance on boot, which will stay
   # alive and prevent the yubikey from working with any users that log
   # in later.
-  systemd.services.shutdownSopsGpg = {
-    path = [ pkgs.gnupg ];
-    script = ''
-      gpgconf --homedir /var/lib/sops --kill gpg-agent
-    '';
-    wantedBy = [ "multi-user.target" ];
-  };
+  # systemd.services.shutdownSopsGpg = {
+  #   path = [ pkgs.gnupg ];
+  #   script = ''
+  #     gpgconf --homedir /var/lib/sops --kill gpg-agent
+  #   '';
+  #   wantedBy = [ "multi-user.target" ];
+  # };
 }

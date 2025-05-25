@@ -6,7 +6,7 @@
     settings = {
       flip-status-indicators = false;
       hide_display_names = true;
-      statusbar_format = "%artists / %album - %title";
+      statusbar_format = "%artists - %album / %title";
       backend = "pulseaudio";
       bitrate = 320;
       gapless = false;

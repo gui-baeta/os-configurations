@@ -5,9 +5,9 @@
   ...
 }:
 {
-  home.activation.setupEtc = config.lib.dag.entryAfter [ "writeBoundary" ] ''
-    run /run/current-system/sw/bin/systemctl start --user sops-nix
-  '';
+  # home.activation.setupEtc = config.lib.dag.entryAfter [ "writeBoundary" ] ''
+  #   run /run/current-system/sw/bin/systemctl start --user sops-nix
+  # '';
 
   sops = {
     defaultSopsFile = "${my-secrets}/hosts.enc.yaml";
