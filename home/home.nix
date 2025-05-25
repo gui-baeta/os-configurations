@@ -20,8 +20,4 @@
   programs.man.generateCaches = true;
   programs.fish.enable = true;
   programs.home-manager.enable = true;
-
-  home.stateVersion = "24.11";
-  home.username = userInf.nick;
-  home.homeDirectory = userInf.homeDir;
 }

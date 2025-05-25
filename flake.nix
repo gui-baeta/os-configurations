@@ -65,17 +65,19 @@
         specialArgs = {
           inherit inputs;
           inherit userInf;
+          inherit my-secrets;
         };
         modules = [
+          ./home/.
           ./modules/.
           ./hosts/pen-and-paper/.
           ./hosts/common.nix
           #
-          # logitech devices comptblty app - solaar Flake
-          solaar.nixosModules.default
-          #
           # to manage disk partitioning with nix
           disko.nixosModules.disko
+          #
+          # logitech devices comptblty app - solaar Flake
+          solaar.nixosModules.default
           #
           # manage secrets with sops through nix
           sops-nix.nixosModules.sops
@@ -83,35 +85,18 @@
           # updated nix-index-database
           nix-index-database.nixosModules.nix-index
           { programs.nix-index-database.comma.enable = true; }
-          #
-          # configs for home-manager
-          home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users.${userInf.nick} = {
-                imports = [
-                  sops-nix.homeManagerModules.sops
-                  ./modules/home/home.nix
-                ];
-              };
-              extraSpecialArgs = {
-                inherit my-secrets;
-                inherit userInf;
-              };
-            };
-          }
         ];
       };
 
-      nixosConfigurations.light-bulb = nixpkgs.lib.nixosSystem rec {
+      nixosConfigurations.light-bulb = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = {
           inherit inputs;
           inherit userInf;
+          inherit my-secrets;
         };
         modules = [
+          ./home/.
           ./modules/.
           ./hosts/light-bulb/.
           ./hosts/common.nix
@@ -125,24 +110,6 @@
           # updated nix-index-database
           nix-index-database.nixosModules.nix-index
           { programs.nix-index-database.comma.enable = true; }
-          #
-          # configs for home-manager
-          home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users.${userInf.nick} = {
-                imports = [
-                  sops-nix.homeManagerModules.sops
-                  ./modules/home/home.nix
-                ];
-              };
-              extraSpecialArgs = {
-                inherit userInf;
-              };
-            };
-          }
         ];
       };
       #

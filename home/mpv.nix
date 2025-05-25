@@ -3,7 +3,7 @@
   ...
 }:
 let
-  gradual-pause = pkgs.callPackage ../../packages/gradual-pause/package.nix { };
+  gradual-pause = pkgs.callPackage ../packages/gradual-pause/package.nix { };
 in
 {
   programs.mpv = {
