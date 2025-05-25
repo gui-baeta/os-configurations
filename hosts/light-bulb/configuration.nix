@@ -347,7 +347,6 @@
       gst_all_1.gst-plugins-good
       gst_all_1.gst-plugins-base
       gst_all_1.icamerasrc-ipu6ep
-      gst_all_1.gst-plugins-viperfx
       gst_all_1.icamerasrc-ipu6epmtl
       gst_all_1.gst-editing-services
 
@@ -417,7 +416,7 @@
       librsvg
       xorg.libXft
       libvdpau
-      gnome2.pango
+      pango
       cairo
       atk
       gdk-pixbuf
