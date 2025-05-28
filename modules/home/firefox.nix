@@ -2,6 +2,9 @@
 {
   # about:config options that could be interested to set:
   #
+  # layout.css.overscroll-behavior.enabled
+  # apz.overscroll.enabled
+  # general.smoothScroll.msdPhysics.enabled
   #
   # # Disables the context menu (three-dot menu) in Firefox's address bar search suggestions
   # browser.urlbar.resultMenu = false
