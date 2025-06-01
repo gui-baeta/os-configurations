@@ -13,6 +13,8 @@ import time
 from zoneinfo import ZoneInfo
 import subprocess
 
+image_extensions = {'.jpg', '.jpeg', '.png', '.tiff', '.tif', '.raw', '.cr2', '.orf', '.nef', '.arw', '.dng'}
+
 def get_system_timezone():
     """Get the system timezone"""
     try:
@@ -70,8 +72,39 @@ def get_image_datetime(image_path, timezone_info=None):
         dt = dt_local.astimezone(timezone_info)
     return dt
 
+def get_image_content_hash(file_path):
+    """Generate hash for image content only, ignoring metadata"""
+    try:
+        with Image.open(file_path) as img:
+            # Convert to RGB to normalize format and remove metadata
+            if img.mode != 'RGB':
+                # For images with transparency or other modes, we need to handle them carefully
+                if img.mode in ('RGBA', 'LA'):
+                    # Create white background for transparent images
+                    background = Image.new('RGB', img.size, (255, 255, 255))
+                    if img.mode == 'RGBA':
+                        background.paste(img, mask=img.split()[-1])  # Use alpha channel as mask
+                    else:  # LA mode
+                        background.paste(img.convert('RGB'))
+                    img = background
+                else:
+                    img = img.convert('RGB')
+            
+            # Get raw image data without any metadata
+            import io
+            img_buffer = io.BytesIO()
+            img.save(img_buffer, format='PNG', optimize=False)  # PNG to avoid JPEG compression differences
+            img_data = img_buffer.getvalue()
+            
+            # Hash the raw image data
+            return hashlib.md5(img_data).hexdigest()
+    except Exception as e:
+        print(f"Warning: Could not hash image content for {file_path}, falling back to file hash: {e}", file=sys.stderr)
+        # Fallback to file hash if image processing fails
+        return get_file_hash(file_path)
+
 def get_file_hash(file_path):
-    """Generate hash for file content comparison"""
+    """Generate hash for entire file content (fallback method)"""
     hash_md5 = hashlib.md5()
     with open(file_path, "rb") as f:
         for chunk in iter(lambda: f.read(4096), b""):
@@ -129,17 +162,27 @@ def create_sorted_filename(dt, seq_num, extension):
     time_part = dt.strftime("%Hh%Mm")
     return f"{time_part}___{seq_num}{extension}"
 
-def file_exists_and_same(source_path, target_path):
-    """Check if target file exists and has same content as source"""
+def find_existing_image_by_content(source_path, target_dir):
+    """Find if an image with the same content already exists in target directory"""
+    if not target_dir.exists():
+        return None
+    
+    source_hash = get_image_content_hash(source_path)
+    
+    # Check all files in target directory
+    for existing_file in target_dir.iterdir():
+        if existing_file.is_file() and existing_file.suffix.lower() in image_extensions:
+            if get_image_content_hash(existing_file) == source_hash:
+                return existing_file
+    
+    return None
+
+def image_content_matches(source_path, target_path):
+    """Check if two images have the same content (ignoring metadata)"""
     if not os.path.exists(target_path):
         return False
     
-    # Compare file sizes first (quick check)
-    if os.path.getsize(source_path) != os.path.getsize(target_path):
-        return False
-    
-    # Compare file hashes
-    return get_file_hash(source_path) == get_file_hash(target_path)
+    return get_image_content_hash(source_path) == get_image_content_hash(target_path)
 
 def ask_yes_no(question, default=False):
     """Ask a yes/no question and return True/False"""
@@ -229,8 +272,6 @@ def process_images(source_dir, target_parent_dir, timezone_info=None):
     photos_dir = target_parent_path / "photos"
     photos_dir.mkdir(parents=True, exist_ok=True)
     
-    # Find all image files
-    image_extensions = {'.jpg', '.jpeg', '.png', '.tiff', '.tif', '.raw', '.cr2', '.orf', '.nef', '.arw', '.dng'}
     image_files = []
     
     for file_path in source_path.rglob('*'):
@@ -249,20 +290,31 @@ def process_images(source_dir, target_parent_dir, timezone_info=None):
         for seq_num, (img_path, img_time) in enumerate(burst, 1):
             extension = img_path.suffix
             
+            # Check if this image already exists anywhere in photos directory
+            existing_file = find_existing_image_by_content(img_path, photos_dir)
+            if existing_file:
+                print(f"? {existing_file.name} (content already exists)")
+                continue
+            
             # Create main filename
             main_filename = create_filename(img_time, seq_num if len(burst) > 1 else 1, extension)
             main_target_path = photos_dir / main_filename
             
-            # Check if file already exists in main photos directory
-            if file_exists_and_same(img_path, main_target_path):
-                print(f"? {main_filename}")
-                # Still need to create hardlinks in sorted folders
-                main_exists = True
-            else:
-                # Copy to main photos directory
+            # If filename exists but content is different, find a new sequence number
+            original_seq_num = seq_num if len(burst) > 1 else 1
+            while main_target_path.exists() and not image_content_matches(img_path, main_target_path):
+                original_seq_num += 1
+                main_filename = create_filename(img_time, original_seq_num, extension)
+                main_target_path = photos_dir / main_filename
+            
+            # Copy to main photos directory
+            if not main_target_path.exists():
                 shutil.copy2(img_path, main_target_path)
                 print(f"+ {main_filename}")
                 main_exists = False
+            else:
+                print(f"? {main_filename} (identical content)")
+                main_exists = True
             
             # Create sorted directory structure
             year_dir = target_parent_path / str(img_time.year)
@@ -271,7 +323,7 @@ def process_images(source_dir, target_parent_dir, timezone_info=None):
             day_dir.mkdir(parents=True, exist_ok=True)
             
             # Create hardlink in sorted directory
-            sorted_filename = create_sorted_filename(img_time, seq_num if len(burst) > 1 else 1, extension)
+            sorted_filename = create_sorted_filename(img_time, original_seq_num, extension)
             sorted_target_path = day_dir / sorted_filename
             
             if not sorted_target_path.exists():
@@ -280,11 +332,6 @@ def process_images(source_dir, target_parent_dir, timezone_info=None):
                 except OSError:
                     # If hardlink fails, copy instead
                     shutil.copy2(main_target_path, sorted_target_path)
-            elif not main_exists:
-                # If sorted file exists but main didn't, it might be a duplicate
-                if not file_exists_and_same(main_target_path, sorted_target_path):
-                    # Files are different, keep both
-                    pass
 
 def main():
     parser = argparse.ArgumentParser(description='Organize photos with burst detection and date-based sorting')
