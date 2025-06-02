@@ -284,18 +284,6 @@
   # Some programs
   # ===================================
 
-  # Fish shell
-  programs.fish.enable = true;
-
-  environment.pathsToLink = [ "/share/fish" ];
-
-  # Set aliases across sessions
-  programs.fish.shellAliases = lib.mkForce {
-    gitwordschanged = ''nix-shell -p git --run "git diff --word-diff=porcelain HEAD | grep -e '^[-+][^-+]' | wc -w"'';
-    gitwordsadded = ''nix-shell -p git --run "git diff --word-diff=porcelain HEAD | grep -e '^+[^-+]' | wc -w"'';
-    list_profile_packages = "nix-store --query --requisites /run/current-system | cut -d- -f2- | sort -u";
-  };
-
   # Fix some linking problems
   programs.nix-ld.enable = true;
 

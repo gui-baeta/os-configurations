@@ -10,6 +10,7 @@
   documentation.man.generateCaches = true;
 
   # Fish shell
+  environment.pathsToLink = [ "/share/fish" ];
   programs.fish = {
     enable = true;
     shellAbbrs = {
@@ -21,6 +22,29 @@
       gitcommitm = "git commit -m";
       gitrestorep = "git restore -p";
       gitrestorestagedp = "git restore --staged -p";
+    };
+    # Set aliases across sessions
+    shellAliases = lib.mkForce {
+      gitwordschanged = ''nix-shell -p git --run "git diff --word-diff=porcelain HEAD | grep -e '^[-+][^-+]' | wc -w"'';
+      gitwordsadded = ''nix-shell -p git --run "git diff --word-diff=porcelain HEAD | grep -e '^+[^-+]' | wc -w"'';
+      list_profile_packages = "nix-store --query --requisites /run/current-system | cut -d- -f2- | sort -u";
+      addtopath = ''
+        function addtopath
+            contains -- $argv $fish_user_paths
+               or set -U fish_user_paths $fish_user_paths $argv
+            echo "Updated PATH: $PATH"
+        end
+      '';
+      removefrompath = ''
+        function removefrompath
+            if set -l index (contains -i $argv[1] $PATH)
+                set --erase --universal fish_user_paths[$index]
+                echo "Updated PATH: $PATH"
+            else
+                echo "$argv[1] not found in PATH: $PATH"
+            end
+        end
+      '';
     };
   };
   # Direnv - To automatically setup nix shells when entering a project directory

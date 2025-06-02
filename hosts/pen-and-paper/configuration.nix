@@ -407,15 +407,6 @@
   virtualisation.spiceUSBRedirection.enable = true;
   # security.wrappers.spice-client-glib-usb-acl-helper.source = "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
 
-  environment.pathsToLink = [ "/share/fish" ];
-
-  # Set aliases across sessions
-  programs.fish.shellAliases = lib.mkForce {
-    gitwordschanged = ''nix-shell -p git --run "git diff --word-diff=porcelain HEAD | grep -e '^[-+][^-+]' | wc -w"'';
-    gitwordsadded = ''nix-shell -p git --run "git diff --word-diff=porcelain HEAD | grep -e '^+[^-+]' | wc -w"'';
-    list_profile_packages = "nix-store --query --requisites /run/current-system | cut -d- -f2- | sort -u";
-  };
-
   # Most software has the HIP libraries hard-coded. You can work around it on NixOS by using:
   systemd.tmpfiles.rules =
     let
